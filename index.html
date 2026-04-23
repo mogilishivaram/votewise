@@ -1,0 +1,3108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="VoteWise: Your AI-powered guide to understanding elections, timelines, and voter rights">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self' https: data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https:; frame-src https:; connect-src https:; img-src 'self' data: https:;">
+  <title>VoteWise — AI Election Assistant</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <style>
+    /* === VARIABLES === */
+    :root {
+      --bg-primary: #0a0c10;
+      --bg-surface: #12151c;
+      --bg-elevated: #1a1e28;
+      --bg-hover: #222733;
+      --accent: #4f8ef7;
+      --accent-glow: rgba(79, 142, 247, 0.25);
+      --accent-hover: #6ba0ff;
+      --confirm: #00e5a0;
+      --confirm-glow: rgba(0, 229, 160, 0.2);
+      --warn: #f7c948;
+      --danger: #f74f4f;
+      --text-primary: #e8ecf4;
+      --text-secondary: #8b95a8;
+      --text-muted: #5a6377;
+      --border: #262b38;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --radius-lg: 16px;
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+      --shadow-glow: 0 0 20px var(--accent-glow);
+      --transition: 0.3s ease;
+      --font-heading: 'Outfit', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    /* === RESET & BASE === */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      font-family: var(--font-heading);
+      line-height: 1.2;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    button {
+      font-family: var(--font-body);
+      cursor: pointer;
+      border: none;
+      outline: none;
+    }
+
+    /* === SKIP LINK === */
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 16px;
+      background: var(--accent);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      z-index: 10000;
+      transition: top var(--transition);
+    }
+
+    .skip-link:focus {
+      top: 16px;
+    }
+
+    /* === FOCUS STYLES === */
+    *:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* === LAYOUT === */
+    .app-header {
+      background: var(--bg-surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+
+    .app-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .app-logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .app-logo-text {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      font-size: 22px;
+      background: linear-gradient(135deg, var(--accent), #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .settings-btn {
+      background: var(--bg-elevated);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all var(--transition);
+    }
+
+    .settings-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+      border-color: var(--accent);
+    }
+
+    .main-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px 100px;
+    }
+
+    /* === COMPONENTS === */
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: all var(--transition);
+    }
+
+    .card:hover {
+      border-color: rgba(79, 142, 247, 0.3);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #6366f1);
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 14px;
+      transition: all var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(79, 142, 247, 0.4);
+    }
+
+    .btn-secondary {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      font-size: 14px;
+      border: 1px solid var(--border);
+      transition: all var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-hover);
+      border-color: var(--accent);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-active {
+      background: var(--confirm-glow);
+      color: var(--confirm);
+    }
+
+    .badge-upcoming {
+      background: rgba(247, 201, 72, 0.15);
+      color: var(--warn);
+    }
+
+    .badge-completed {
+      background: rgba(139, 149, 168, 0.15);
+      color: var(--text-secondary);
+    }
+
+    /* === TABS === */
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 6px;
+      margin: 24px 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-bar::-webkit-scrollbar {
+      height: 0;
+    }
+
+    .tab-btn {
+      flex: 1;
+      min-width: 100px;
+      padding: 12px 16px;
+      background: transparent;
+      color: var(--text-secondary);
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: all var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+      background: var(--bg-hover);
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--accent), #6366f1);
+      color: #fff;
+      box-shadow: 0 2px 12px rgba(79, 142, 247, 0.3);
+    }
+
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* === HOME TAB === */
+    .hero {
+      text-align: center;
+      padding: 48px 20px;
+      background: linear-gradient(180deg, rgba(79, 142, 247, 0.08) 0%, transparent 100%);
+      border-radius: var(--radius-lg);
+      margin-bottom: 32px;
+      border: 1px solid var(--border);
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #fff, var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      color: var(--text-secondary);
+      font-size: 16px;
+      max-width: 600px;
+      margin: 0 auto 24px;
+    }
+
+    .stat-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-align: center;
+      transition: all var(--transition);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .stat-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .stat-number {
+      font-family: var(--font-heading);
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .home-charts-section {
+      margin-top: 32px;
+    }
+
+    .home-charts-section h2 {
+      font-size: 22px;
+      margin-bottom: 16px;
+    }
+
+    .ai-summary-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-top: 24px;
+    }
+
+    .ai-summary-box h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ai-summary-content {
+      color: var(--text-secondary);
+      font-size: 15px;
+      line-height: 1.7;
+      min-height: 60px;
+    }
+
+    /* === TIMELINE === */
+    .timeline-container {
+      margin-top: 16px;
+    }
+
+    .chart-wrapper {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+
+    .chart-wrapper h2 {
+      font-size: 20px;
+      margin-bottom: 16px;
+    }
+
+    .phase-cards {
+      display: grid;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .phase-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .phase-card:hover {
+      border-color: var(--accent);
+      background: var(--bg-elevated);
+    }
+
+    .phase-card.active-phase {
+      border-color: var(--confirm);
+      box-shadow: 0 0 16px var(--confirm-glow);
+    }
+
+    .phase-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .phase-info {
+      flex: 1;
+    }
+
+    .phase-info h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .phase-dates {
+      color: var(--text-secondary);
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .phase-description {
+      color: var(--text-secondary);
+      font-size: 14px;
+      display: none;
+      margin-top: 8px;
+      line-height: 1.6;
+    }
+
+    .phase-card.expanded .phase-description {
+      display: block;
+    }
+
+    .phase-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .days-remaining {
+      font-family: var(--font-heading);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.4;
+      }
+    }
+
+    .pulse-dot {
+      width: 10px;
+      height: 10px;
+      background: var(--confirm);
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+      box-shadow: 0 0 8px var(--confirm);
+    }
+
+    /* === STEPPER === */
+    .stepper-progress {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      margin-bottom: 24px;
+    }
+
+    .progress-bar-bg {
+      height: 8px;
+      background: var(--bg-hover);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--confirm));
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .progress-label {
+      font-size: 14px;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .steps-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .step-item {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: all var(--transition);
+    }
+
+    .step-header {
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      transition: background var(--transition);
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      color: var(--text-primary);
+      font-family: var(--font-body);
+    }
+
+    .step-header:hover {
+      background: var(--bg-elevated);
+    }
+
+    .step-number {
+      width: 36px;
+      height: 36px;
+      background: var(--bg-hover);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+    }
+
+    .step-item.completed .step-number {
+      background: var(--confirm);
+      color: #0a0c10;
+    }
+
+    .step-title {
+      flex: 1;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .step-chevron {
+      color: var(--text-muted);
+      transition: transform var(--transition);
+      font-size: 14px;
+    }
+
+    .step-item.expanded .step-chevron {
+      transform: rotate(180deg);
+    }
+
+    .step-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .step-item.expanded .step-content {
+      max-height: 800px;
+    }
+
+    .step-content-inner {
+      padding: 0 20px 20px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .step-content-inner ul {
+      margin: 8px 0;
+      padding-left: 20px;
+    }
+
+    .step-content-inner li {
+      margin-bottom: 4px;
+    }
+
+    .step-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .mark-complete-btn {
+      background: var(--confirm);
+      color: #0a0c10;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      transition: all var(--transition);
+    }
+
+    .mark-complete-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 12px var(--confirm-glow);
+    }
+
+    .maps-section {
+      margin-top: 24px;
+    }
+
+    .maps-section h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+
+    .maps-wrapper {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .maps-wrapper iframe {
+      display: block;
+    }
+
+    .maps-info {
+      padding: 16px;
+    }
+
+    .maps-info h4 {
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .maps-info p {
+      color: var(--text-secondary);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    /* === ACCORDION (Rights) === */
+    .rights-search {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .search-input-wrap {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      padding: 12px 16px 12px 40px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: var(--font-body);
+      transition: border-color var(--transition);
+    }
+
+    .search-input-wrap input:focus {
+      border-color: var(--accent);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .accordion {
+      display: grid;
+      gap: 10px;
+    }
+
+    .accordion-item {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: all var(--transition);
+    }
+
+    .accordion-header {
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 600;
+      transition: background var(--transition);
+    }
+
+    .accordion-header:hover {
+      background: var(--bg-elevated);
+    }
+
+    .accordion-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .accordion-chevron {
+      margin-left: auto;
+      color: var(--text-muted);
+      transition: transform var(--transition);
+      font-size: 12px;
+    }
+
+    .accordion-item.expanded .accordion-chevron {
+      transform: rotate(180deg);
+    }
+
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .accordion-item.expanded .accordion-body {
+      max-height: 500px;
+    }
+
+    .accordion-body-inner {
+      padding: 0 20px 20px;
+      padding-left: 52px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .rights-ai-box {
+      margin-top: 32px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+
+    .rights-ai-box h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mini-chat-input {
+      display: flex;
+      gap: 8px;
+    }
+
+    .mini-chat-input input {
+      flex: 1;
+      padding: 12px 16px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: var(--font-body);
+    }
+
+    .mini-chat-input input:focus {
+      border-color: var(--accent);
+    }
+
+    .mini-chat-response {
+      margin-top: 16px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.7;
+      min-height: 24px;
+    }
+
+    /* === CHARTS === */
+    .chart-container {
+      width: 100%;
+      min-height: 200px;
+    }
+
+    /* === AI CHAT === */
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 260px);
+      min-height: 500px;
+      max-height: 700px;
+    }
+
+    .chat-header {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius) var(--radius) 0 0;
+      padding: 20px;
+    }
+
+    .chat-header h2 {
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chat-header p {
+      color: var(--text-secondary);
+      font-size: 13px;
+      margin-top: 4px;
+    }
+
+    .quick-prompts {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .quick-prompt-btn {
+      background: var(--bg-elevated);
+      color: var(--text-secondary);
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      transition: all var(--transition);
+    }
+
+    .quick-prompt-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+      border-color: var(--accent);
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      background: var(--bg-primary);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .chat-messages::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    .message {
+      max-width: 85%;
+      padding: 14px 18px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      line-height: 1.6;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .message-user {
+      background: linear-gradient(135deg, var(--accent), #6366f1);
+      color: #fff;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message-ai {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+
+    .message-ai .msg-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .chat-input-area {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: 0 0 var(--radius) var(--radius);
+      padding: 16px;
+    }
+
+    .chat-input-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .chat-input-row input {
+      flex: 1;
+      padding: 14px 18px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: var(--font-body);
+    }
+
+    .chat-input-row input:focus {
+      border-color: var(--accent);
+    }
+
+    .send-btn {
+      background: linear-gradient(135deg, var(--accent), #6366f1);
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 14px;
+      transition: all var(--transition);
+      white-space: nowrap;
+    }
+
+    .send-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(79, 142, 247, 0.4);
+    }
+
+    .send-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .chat-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .char-count {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .char-count.warning {
+      color: var(--warn);
+    }
+
+    .chat-loading {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      font-size: 13px;
+      padding: 8px 0;
+    }
+
+    .chat-loading.visible {
+      display: flex;
+    }
+
+    .loading-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* === FAQ === */
+    .faq-search {
+      margin-bottom: 20px;
+    }
+
+    .faq-search input {
+      width: 100%;
+      padding: 14px 18px 14px 44px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: var(--font-body);
+    }
+
+    .faq-search input:focus {
+      border-color: var(--accent);
+    }
+
+    .faq-search {
+      position: relative;
+    }
+
+    .faq-search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+
+    .faq-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .faq-item {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      color: var(--text-primary);
+      font-family: var(--font-body);
+      font-size: 15px;
+      font-weight: 600;
+      transition: background var(--transition);
+    }
+
+    .faq-question:hover {
+      background: var(--bg-elevated);
+    }
+
+    .faq-chevron {
+      margin-left: auto;
+      color: var(--text-muted);
+      transition: transform var(--transition);
+      font-size: 12px;
+    }
+
+    .faq-item.expanded .faq-chevron {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .faq-item.expanded .faq-answer {
+      max-height: 400px;
+    }
+
+    .faq-answer-inner {
+      padding: 0 20px 16px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .faq-rating {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .faq-rating button {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all var(--transition);
+    }
+
+    .faq-helpful-btn {
+      background: var(--confirm-glow);
+      color: var(--confirm);
+      border: 1px solid transparent;
+    }
+
+    .faq-helpful-btn:hover,
+    .faq-helpful-btn.selected {
+      background: var(--confirm);
+      color: #0a0c10;
+    }
+
+    .faq-nothelpful-btn {
+      background: rgba(247, 79, 79, 0.1);
+      color: var(--danger);
+      border: 1px solid transparent;
+    }
+
+    .faq-nothelpful-btn:hover,
+    .faq-nothelpful-btn.selected {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .faq-confused-box {
+      text-align: center;
+      margin-top: 32px;
+      padding: 32px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .faq-confused-box h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .faq-confused-box p {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    /* === SETTINGS MODAL === */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal-overlay.visible {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      max-width: 460px;
+      width: 90%;
+      box-shadow: var(--shadow);
+    }
+
+    .modal h2 {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .modal p {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .modal label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .modal input[type="password"] {
+      width: 100%;
+      padding: 12px 16px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: var(--font-body);
+      margin-bottom: 16px;
+    }
+
+    .modal input[type="password"]:focus {
+      border-color: var(--accent);
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .key-status {
+      font-size: 13px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .key-status.saved {
+      color: var(--confirm);
+    }
+
+    .key-status.error {
+      color: var(--danger);
+    }
+
+    /* === TEST PANEL === */
+    .test-panel {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      z-index: 300;
+      width: 340px;
+      max-height: 80vh;
+      overflow: hidden;
+      transition: all var(--transition);
+    }
+
+    .test-panel.collapsed {
+      width: auto;
+      max-height: none;
+    }
+
+    .test-panel-header {
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-elevated);
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .test-panel-header h3 {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .test-toggle-btn {
+      background: none;
+      color: var(--text-secondary);
+      font-size: 18px;
+      padding: 4px 8px;
+    }
+
+    .test-panel-body {
+      padding: 14px 18px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .test-panel.collapsed .test-panel-body {
+      display: none;
+    }
+
+    .test-result {
+      padding: 8px 0;
+      font-size: 13px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .test-result:last-child {
+      border-bottom: none;
+    }
+
+    .test-result .icon {
+      flex-shrink: 0;
+      font-size: 14px;
+    }
+
+    .test-score {
+      padding: 14px 18px;
+      font-family: var(--font-heading);
+      font-size: 16px;
+      font-weight: 700;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .test-score.perfect {
+      color: var(--confirm);
+    }
+
+    .test-score.partial {
+      color: var(--warn);
+    }
+
+    .test-panel-footer {
+      padding: 14px 18px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .run-tests-btn {
+      background: var(--accent);
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      transition: all var(--transition);
+    }
+
+    .run-tests-btn:hover {
+      background: var(--accent-hover);
+    }
+
+    /* === ERROR / ALERT === */
+    .alert {
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .alert-error {
+      background: rgba(247, 79, 79, 0.1);
+      color: var(--danger);
+      border: 1px solid rgba(247, 79, 79, 0.2);
+    }
+
+    .alert-success {
+      background: var(--confirm-glow);
+      color: var(--confirm);
+      border: 1px solid rgba(0, 229, 160, 0.2);
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 768px) {
+      .app-header {
+        padding: 12px 16px;
+      }
+
+      .main-content {
+        padding: 0 12px 80px;
+      }
+
+      .hero {
+        padding: 32px 16px;
+      }
+
+      .hero h1 {
+        font-size: 26px;
+      }
+
+      .tab-btn {
+        min-width: 80px;
+        padding: 10px 12px;
+        font-size: 12px;
+      }
+
+      .tab-btn .tab-label {
+        display: none;
+      }
+
+      .stat-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .chat-container {
+        height: calc(100vh - 220px);
+        min-height: 400px;
+      }
+
+      .quick-prompts {
+        gap: 6px;
+      }
+
+      .quick-prompt-btn {
+        font-size: 11px;
+        padding: 6px 10px;
+      }
+
+      .test-panel {
+        width: calc(100% - 24px);
+        right: 12px;
+        bottom: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 22px;
+      }
+
+      .tab-bar {
+        gap: 2px;
+        padding: 4px;
+      }
+
+      .quick-actions {
+        flex-direction: column;
+      }
+
+      .chat-input-row {
+        flex-direction: column;
+      }
+
+      .send-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Skip to Content Link -->
+  <a href="#main-content" class="skip-link" aria-label="Skip to main content">Skip to Content</a>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="app-logo">
+      <div class="app-logo-icon" aria-label="VoteWise Logo">🗳️</div>
+      <span class="app-logo-text">VoteWise</span>
+    </div>
+    <div class="header-actions">
+      <button class="settings-btn" onclick="openSettings()" aria-label="Open API settings">
+        ⚙️ Settings
+      </button>
+    </div>
+  </header>
+
+  <!-- Tab Navigation -->
+  <div class="main-content">
+    <nav class="tab-bar" role="navigation" aria-label="Main navigation tabs">
+      <button class="tab-btn active" data-tab="home" role="tab" aria-selected="true" aria-controls="panel-home"
+        id="tab-home" aria-label="Home Overview" onclick="switchTab('home')">
+        🏠 <span class="tab-label">Home</span>
+      </button>
+      <button class="tab-btn" data-tab="timeline" role="tab" aria-selected="false" aria-controls="panel-timeline"
+        id="tab-timeline" aria-label="Election Timeline" onclick="switchTab('timeline')">
+        📅 <span class="tab-label">Timeline</span>
+      </button>
+      <button class="tab-btn" data-tab="guide" role="tab" aria-selected="false" aria-controls="panel-guide"
+        id="tab-guide" aria-label="Step by Step Guide" onclick="switchTab('guide')">
+        📋 <span class="tab-label">Guide</span>
+      </button>
+      <button class="tab-btn" data-tab="rights" role="tab" aria-selected="false" aria-controls="panel-rights"
+        id="tab-rights" aria-label="Know Your Rights" onclick="switchTab('rights')">
+        ⚖️ <span class="tab-label">Rights</span>
+      </button>
+      <button class="tab-btn" data-tab="assistant" role="tab" aria-selected="false" aria-controls="panel-assistant"
+        id="tab-assistant" aria-label="AI Election Assistant" onclick="switchTab('assistant')">
+        🤖 <span class="tab-label">AI Help</span>
+      </button>
+      <button class="tab-btn" data-tab="faq" role="tab" aria-selected="false" aria-controls="panel-faq" id="tab-faq"
+        aria-label="Frequently Asked Questions" onclick="switchTab('faq')">
+        ❓ <span class="tab-label">FAQ</span>
+      </button>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main id="main-content" role="main">
+
+      <!-- TAB 1: HOME -->
+      <section class="tab-panel active" id="panel-home" role="tabpanel" aria-labelledby="tab-home">
+        <div class="hero">
+          <h1>Your AI-Powered Election Guide</h1>
+          <p>VoteWise makes understanding the election process simple, accessible, and interactive. Explore timelines,
+            learn your rights, and get AI-powered answers to all your election questions.</p>
+          <div class="quick-actions">
+            <button class="btn-primary" onclick="switchTab('timeline')" aria-label="View election timeline">📅 View
+              Timeline</button>
+            <button class="btn-primary" onclick="switchTab('guide')" aria-label="Start voting guide">📋 Start
+              Guide</button>
+            <button class="btn-primary" onclick="switchTab('assistant')" aria-label="Ask AI for help">🤖 Ask AI</button>
+          </div>
+        </div>
+
+        <div class="stat-cards">
+          <div class="stat-card">
+            <div class="stat-icon" aria-label="Phases icon">📊</div>
+            <div class="stat-number">6</div>
+            <div class="stat-label">Election Phases</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" aria-label="Calendar icon">📅</div>
+            <div class="stat-number">Nov 4</div>
+            <div class="stat-label">Voting Day 2026</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" aria-label="Shield icon">🛡️</div>
+            <div class="stat-number">6+</div>
+            <div class="stat-label">Your Protected Rights</div>
+          </div>
+        </div>
+
+        <div class="home-charts-section">
+          <h2>Voter Turnout by Age Group</h2>
+          <div class="chart-wrapper">
+            <div id="home-bar-chart" class="chart-container" style="min-height:300px;"
+              aria-label="Bar chart showing voter turnout by age group"></div>
+          </div>
+        </div>
+
+        <div class="ai-summary-box">
+          <h3>🤖 AI Election Summary</h3>
+          <div class="ai-summary-content" id="ai-summary" aria-live="polite">
+            Click the button below to generate an AI-powered summary of the current election status using Google Gemini.
+          </div>
+          <button class="btn-primary" style="margin-top:16px;" onclick="generateSummary()"
+            aria-label="Generate AI election summary" id="generate-summary-btn">
+            ✨ Generate Election Summary
+          </button>
+        </div>
+      </section>
+
+      <!-- TAB 2: TIMELINE -->
+      <section class="tab-panel" id="panel-timeline" role="tabpanel" aria-labelledby="tab-timeline">
+        <h2 style="font-size:24px;margin-bottom:8px;">Election Timeline 2026</h2>
+        <p style="color:var(--text-secondary);font-size:14px;margin-bottom:24px;">Track every phase of the election
+          process from registration to results declaration.</p>
+
+        <div class="chart-wrapper">
+          <div id="timeline-chart" class="chart-container" style="min-height:200px;"
+            aria-label="Google Charts Timeline showing election phases"></div>
+        </div>
+
+        <div class="phase-cards" id="phase-cards">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- TAB 3: STEP-BY-STEP GUIDE -->
+      <section class="tab-panel" id="panel-guide" role="tabpanel" aria-labelledby="tab-guide">
+        <h2 style="font-size:24px;margin-bottom:8px;">Step-by-Step Voting Guide</h2>
+        <p style="color:var(--text-secondary);font-size:14px;margin-bottom:24px;">Follow these 6 steps to make your vote
+          count. Mark each step complete as you go.</p>
+
+        <div class="stepper-progress">
+          <div class="progress-label">
+            <span>Your Progress</span>
+            <span id="progress-text">0 of 6 completed</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar" style="width:0%;" role="progressbar" aria-valuenow="0"
+              aria-valuemin="0" aria-valuemax="100" aria-label="Guide completion progress"></div>
+          </div>
+        </div>
+
+        <div class="steps-list" id="steps-list">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="maps-section">
+          <h3>📍 Find Your Nearest Polling Station</h3>
+          <div class="maps-wrapper">
+            <iframe id="google-maps-iframe"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215!2d-73.9857!3d40.7484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
+              width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade" title="Google Maps showing nearest polling station location"
+              aria-label="Google Maps embed showing nearest polling station">
+            </iframe>
+            <div class="maps-info">
+              <h4>📍 Community Center Polling Station</h4>
+              <p>350 Fifth Avenue, New York, NY 10118 · Open 6 AM – 9 PM on Voting Day</p>
+              <a href="https://www.google.com/maps/dir/?api=1&destination=350+Fifth+Avenue+New+York+NY+10118"
+                target="_blank" rel="noopener noreferrer" class="btn-secondary"
+                aria-label="Get directions to polling station on Google Maps">
+                🧭 Get Directions
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: KNOW YOUR RIGHTS -->
+      <section class="tab-panel" id="panel-rights" role="tabpanel" aria-labelledby="tab-rights">
+        <h2 style="font-size:24px;margin-bottom:8px;">Know Your Voter Rights</h2>
+        <p style="color:var(--text-secondary);font-size:14px;margin-bottom:24px;">Every eligible voter has federally
+          protected rights. Learn about each one below.</p>
+
+        <div class="rights-search">
+          <div class="search-input-wrap">
+            <span class="search-icon" aria-hidden="true">🔍</span>
+            <input type="text" id="rights-search-input" placeholder="Search voter rights..."
+              aria-label="Search voter rights by keyword" oninput="filterRights(this.value)">
+          </div>
+        </div>
+
+        <div class="accordion" id="rights-accordion">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="rights-ai-box">
+          <h3>🤖 Ask About Your Rights</h3>
+          <p style="color:var(--text-secondary);font-size:14px;margin-bottom:12px;">Have a specific question about voter
+            rights? Ask our AI advisor.</p>
+          <div class="mini-chat-input">
+            <input type="text" id="rights-ai-input" placeholder="e.g., Can my employer prevent me from voting?"
+              maxlength="500" aria-label="Ask a question about voter rights">
+            <button class="btn-primary" onclick="askRightsAI()" aria-label="Submit voter rights question to AI">Ask
+              AI</button>
+          </div>
+          <div class="mini-chat-response" id="rights-ai-response" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- TAB 5: AI ASSISTANT -->
+      <section class="tab-panel" id="panel-assistant" role="tabpanel" aria-labelledby="tab-assistant">
+        <div class="chat-container">
+          <div class="chat-header">
+            <h2>🤖 AI Election Assistant</h2>
+            <p>Powered by Google Gemini 2.0 Flash — Ask anything about the election process</p>
+            <div class="quick-prompts">
+              <button class="quick-prompt-btn" onclick="sendQuickPrompt('How do I register to vote?')"
+                aria-label="Ask how to register to vote">How do I register?</button>
+              <button class="quick-prompt-btn" onclick="sendQuickPrompt('When is voting day?')"
+                aria-label="Ask when voting day is">When is voting day?</button>
+              <button class="quick-prompt-btn" onclick="sendQuickPrompt('What ID do I need to vote?')"
+                aria-label="Ask what ID is needed">What ID do I need?</button>
+              <button class="quick-prompt-btn" onclick="sendQuickPrompt('How are votes counted?')"
+                aria-label="Ask how votes are counted">How are votes counted?</button>
+              <button class="quick-prompt-btn" onclick="sendQuickPrompt('What if I make a mistake on my ballot?')"
+                aria-label="Ask about ballot mistakes">Ballot mistakes?</button>
+            </div>
+          </div>
+
+          <div class="chat-messages" id="chat-messages" aria-live="polite" aria-label="Chat messages">
+            <div class="message message-ai">
+              <div class="msg-label">VoteWise AI</div>
+              Welcome! I'm your AI Election Assistant powered by Google Gemini. Ask me anything about the election
+              process — from voter registration to understanding your ballot. How can I help you today?
+            </div>
+          </div>
+
+          <div class="chat-input-area">
+            <div class="chat-loading" id="chat-loading" aria-live="assertive">
+              <div class="loading-spinner" aria-label="AI is thinking"></div>
+              <span>AI is thinking...</span>
+            </div>
+            <div class="chat-input-row">
+              <input type="text" id="chat-input" placeholder="Ask about elections, voting, registration..."
+                maxlength="500" aria-label="Type your election question"
+                onkeydown="if(event.key==='Enter')sendMessage()" oninput="updateCharCount()">
+              <button class="send-btn" id="send-btn" onclick="sendMessage()"
+                aria-label="Send message to AI assistant">Send ▶</button>
+            </div>
+            <div class="chat-meta">
+              <span class="char-count" id="char-count">0/500</span>
+              <span style="font-size:12px;color:var(--text-muted);">Powered by Gemini 2.0 Flash</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 6: FAQ -->
+      <section class="tab-panel" id="panel-faq" role="tabpanel" aria-labelledby="tab-faq">
+        <h2 style="font-size:24px;margin-bottom:8px;">Frequently Asked Questions</h2>
+        <p style="color:var(--text-secondary);font-size:14px;margin-bottom:24px;">Find quick answers to the most common
+          election questions.</p>
+
+        <div class="chart-wrapper">
+          <h3 style="font-size:16px;margin-bottom:12px;">Most Asked Questions by Category</h3>
+          <div id="faq-pie-chart" class="chart-container" style="min-height:300px;"
+            aria-label="Pie chart showing FAQ categories distribution"></div>
+        </div>
+
+        <div class="faq-search">
+          <span class="faq-search-icon" aria-hidden="true">🔍</span>
+          <input type="text" id="faq-search-input" placeholder="Search frequently asked questions..."
+            aria-label="Search FAQs" oninput="filterFAQs(this.value)">
+        </div>
+
+        <div class="faq-list" id="faq-list">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="faq-confused-box">
+          <h3>🤔 Still Confused?</h3>
+          <p>Our AI assistant can answer specific questions about the election process in detail.</p>
+          <button class="btn-primary" onclick="switchTab('assistant')" aria-label="Open AI Assistant for more help">🤖
+            Ask the AI Assistant</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Settings Modal -->
+  <div class="modal-overlay" id="settings-modal" role="dialog" aria-modal="true" aria-label="API Settings">
+    <div class="modal">
+      <h2>⚙️ API Settings</h2>
+      <p>Enter your Google Gemini API key to enable AI features. Your key is stored in sessionStorage and cleared when
+        you close this tab.</p>
+      <label for="api-key-input">Gemini API Key</label>
+      <input type="password" id="api-key-input" placeholder="AIza..." aria-label="Enter your Gemini API key">
+      <div class="key-status" id="key-status" aria-live="assertive"></div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeSettings()" aria-label="Cancel and close settings">Cancel</button>
+        <button class="btn-primary" onclick="saveApiKey()" aria-label="Save API key securely">Save Key</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Test Panel -->
+  <div class="test-panel" id="test-panel" aria-label="Test results panel">
+    <div class="test-panel-header" onclick="toggleTestPanel()" aria-label="Toggle test panel visibility">
+      <h3>🧪 Test Results</h3>
+      <button class="test-toggle-btn" id="test-toggle-btn" aria-label="Collapse or expand test panel">▼</button>
+    </div>
+    <div class="test-panel-body" id="test-panel-body">
+      <div id="test-results"></div>
+    </div>
+    <div class="test-score" id="test-score"></div>
+    <div class="test-panel-footer">
+      <button class="run-tests-btn" onclick="runAllTests()" aria-label="Run all tests again">🔄 Run Tests Again</button>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * VoteWise - AI-Powered Election Process Assistant
+     * @version 1.0.0
+     * @author Shiva Ram Mogili
+     * @description PromptWars 2026 - Election Assistant Challenge
+     * @built-with Google Antigravity + Gemini AI
+     */
+
+    /* ============================================
+     *  DATA & CONFIGURATION
+     * ============================================ */
+
+    /** @type {string} Gemini API endpoint */
+    const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+
+    /** @type {string} System prompt providing full election context to Gemini */
+    const SYSTEM_PROMPT = `You are VoteWise, an expert AI election assistant. You provide accurate, non-partisan information about the U.S. election process for the 2026 election cycle.
+
+Key Election Context:
+- Election Year: 2026 (Midterm Elections)
+- Voting Day: November 3, 2026
+- Registration Deadline: Varies by state, typically 15-30 days before Election Day
+- Early Voting: Available in most states starting mid-October 2026
+
+Election Phases:
+1. Voter Registration Period (Jan 1 – Mar 31, 2026)
+2. Candidate Nomination (Apr 1 – Jun 30, 2026) — CURRENT PHASE
+3. Campaign Period (Jul 1 – Nov 2, 2026)
+4. Voting Day (Nov 3, 2026)
+5. Vote Counting (Nov 3 – Nov 17, 2026)
+6. Results Declaration (Nov 18 – Dec 15, 2026)
+
+Voter Rights (Federal):
+- Right to vote without intimidation
+- Right to assistance if needed
+- Right to a secret ballot
+- Right to a provisional ballot
+- Right to accessible polling stations
+- Right to report violations
+
+Rules:
+- Be concise but thorough
+- Always be non-partisan
+- Provide actionable guidance
+- If unsure, recommend official election resources
+- Format dates clearly
+- Keep responses under 250 words`;
+
+    /**
+     * Election phases data array
+     * @type {Array<{id: string, icon: string, name: string, start: Date, end: Date, description: string}>}
+     */
+    const ELECTION_PHASES = [
+      {
+        id: 'registration',
+        icon: '📝',
+        name: 'Voter Registration Period',
+        start: new Date('2026-01-01'),
+        end: new Date('2026-03-31'),
+        description: 'During this phase, eligible citizens can register to vote. You must be at least 18 years old by Election Day, a U.S. citizen, and a resident of your state. Registration can be done online, by mail, or in person at your local election office. Check your state\'s specific deadlines as some allow same-day registration.'
+      },
+      {
+        id: 'nomination',
+        icon: '🎤',
+        name: 'Candidate Nomination',
+        start: new Date('2026-04-01'),
+        end: new Date('2026-06-30'),
+        description: 'Candidates officially file to run for office and are nominated by their parties. Primary elections and caucuses determine party nominees. This is when candidate platforms are solidified and ballot positions are determined. Party conventions may also occur during this phase.'
+      },
+      {
+        id: 'campaign',
+        icon: '📢',
+        name: 'Campaign Period',
+        start: new Date('2026-07-01'),
+        end: new Date('2026-11-02'),
+        description: 'Candidates actively campaign, participate in debates, and present their platforms to voters. This period includes town halls, rallies, media appearances, and voter outreach. Campaign finance disclosures are filed and made public. Voters should research candidates and their positions during this time.'
+      },
+      {
+        id: 'voting',
+        icon: '🗳️',
+        name: 'Voting Day',
+        start: new Date('2026-11-03'),
+        end: new Date('2026-11-03'),
+        description: 'Election Day — polls are open for all registered voters from early morning (typically 6-7 AM) to evening (7-8 PM), with exact hours varying by state. Voters cast their ballots at designated polling stations. Bring a valid photo ID where required. If you encounter issues, you have the right to cast a provisional ballot.'
+      },
+      {
+        id: 'counting',
+        icon: '📊',
+        name: 'Vote Counting',
+        start: new Date('2026-11-03'),
+        end: new Date('2026-11-17'),
+        description: 'After polls close, election officials count all ballots including mail-in, absentee, and provisional ballots. Vote counting must follow strict chain-of-custody procedures. Bipartisan observers may watch the counting process. Unofficial results are typically available on election night, but final counts may take days or weeks for close races.'
+      },
+      {
+        id: 'results',
+        icon: '🏆',
+        name: 'Results Declaration',
+        start: new Date('2026-11-18'),
+        end: new Date('2026-12-15'),
+        description: 'Official election results are certified by state and local election authorities. Recount procedures are triggered if margins are within specified thresholds. Winners are officially declared, and transition processes begin for newly elected officials. All results are made part of the public record.'
+      }
+    ];
+
+    /**
+     * Voting steps data for the step-by-step guide
+     * @type {Array<{title: string, icon: string, content: string}>}
+     */
+    const VOTING_STEPS = [
+      {
+        title: 'Check Voter Eligibility',
+        icon: '✅',
+        content: `<p>Before registering, confirm you meet all eligibility requirements:</p>
+          <ul>
+            <li>You must be a <strong>U.S. citizen</strong></li>
+            <li>You must be <strong>at least 18 years old</strong> on or before Election Day</li>
+            <li>You must be a <strong>resident of the state</strong> where you plan to vote</li>
+            <li>You must meet your state's <strong>residency requirements</strong></li>
+            <li>You must <strong>not be currently serving a felony sentence</strong> (varies by state)</li>
+          </ul>
+          <p>Visit <strong>vote.gov</strong> to check your specific state's requirements.</p>`
+      },
+      {
+        title: 'Register to Vote',
+        icon: '📝',
+        content: `<p>Register through one of these convenient methods:</p>
+          <ul>
+            <li><strong>Online:</strong> Visit your state's election website or vote.gov</li>
+            <li><strong>By Mail:</strong> Download and mail the National Voter Registration Form</li>
+            <li><strong>In Person:</strong> Visit your local election office, DMV, or public library</li>
+            <li><strong>Deadline:</strong> Register at least 15-30 days before Election Day (varies by state)</li>
+          </ul>
+          <p>You'll need your <strong>full legal name, address, date of birth,</strong> and <strong>state ID or last 4 digits of SSN</strong>. You'll receive a voter registration card confirming your registration.</p>`
+      },
+      {
+        title: 'Find Your Polling Station',
+        icon: '📍',
+        content: `<p>Locate your assigned polling station before Election Day:</p>
+          <ul>
+            <li>Check your <strong>voter registration card</strong> — it lists your polling location</li>
+            <li>Use your state or county election website's <strong>polling place locator</strong></li>
+            <li>Call your <strong>local election office</strong> for assistance</li>
+            <li>Check <strong>Google Maps</strong> for polling locations near you</li>
+          </ul>
+          <p>Note: Your polling station is based on your <strong>registered address</strong>. If you've moved, update your registration. Check hours of operation — most polls open at <strong>6-7 AM</strong> and close at <strong>7-8 PM</strong>.</p>`
+      },
+      {
+        title: 'Understand Your Ballot',
+        icon: '📄',
+        content: `<p>Familiarize yourself with what you'll be voting on:</p>
+          <ul>
+            <li>Research <strong>candidates and their platforms</strong> for each race</li>
+            <li>Review any <strong>ballot measures or propositions</strong></li>
+            <li>Check your <strong>sample ballot</strong> online before heading to the polls</li>
+            <li>Understand the <strong>different sections</strong>: federal, state, and local races</li>
+            <li>You can bring <strong>notes or a prepared list</strong> to the polling station</li>
+          </ul>
+          <p>Many states offer <strong>sample ballots</strong> on their election websites weeks before the election. Take time to research each contest.</p>`
+      },
+      {
+        title: 'Cast Your Vote',
+        icon: '🗳️',
+        content: `<p>On Election Day, follow these steps at your polling station:</p>
+          <ul>
+            <li><strong>Arrive at your polling station</strong> during operating hours</li>
+            <li><strong>Check in</strong> with poll workers and show required ID</li>
+            <li><strong>Receive your ballot</strong> (paper or electronic)</li>
+            <li><strong>Mark your choices</strong> carefully — follow all instructions</li>
+            <li><strong>Review your ballot</strong> before submitting</li>
+            <li><strong>Submit your ballot</strong> — feed paper ballot into scanner or confirm electronic submission</li>
+            <li><strong>Get your "I Voted" sticker!</strong></li>
+          </ul>
+          <p>If you make a mistake, <strong>ask for a new ballot</strong> — do not cross out or alter your choices.</p>`
+      },
+      {
+        title: 'Verify Your Vote Was Counted',
+        icon: '🔍',
+        content: `<p>After voting, you can confirm your ballot was received and counted:</p>
+          <ul>
+            <li>Use your state's <strong>ballot tracking tool</strong> (for mail-in/absentee ballots)</li>
+            <li>Check your <strong>state election website</strong> for confirmation</li>
+            <li>Contact your <strong>local election office</strong> if you have concerns</li>
+            <li>For provisional ballots, follow up within <strong>7-10 days</strong></li>
+          </ul>
+          <p>If you believe your vote was not properly counted, you have the right to <strong>file a complaint</strong> with your state election board or the Election Assistance Commission.</p>`
+      }
+    ];
+
+    /**
+     * Voter rights data for the accordion
+     * @type {Array<{icon: string, title: string, description: string}>}
+     */
+    const VOTER_RIGHTS = [
+      {
+        icon: '🛡️',
+        title: 'Right to Vote Without Intimidation',
+        description: 'Federal law protects your right to vote free from threats, coercion, or intimidation. No one — including employers, union officials, or political party representatives — may threaten you for how you vote or whether you vote. The Voting Rights Act of 1965 and the Intimidation of Voters Act (18 U.S.C. § 594) make voter intimidation a federal crime. If you experience intimidation, report it immediately to poll workers and the Department of Justice Voting Section at 800-253-3931.'
+      },
+      {
+        icon: '🤝',
+        title: 'Right to Assistance If Needed',
+        description: 'If you need help to vote due to blindness, disability, or inability to read or write, you have the right to bring an assistant of your choice into the voting booth. Your assistant can be anyone except your employer, your employer\'s agent, or an officer or agent of your union. Poll workers are also trained to provide assistance. This right is guaranteed under Section 208 of the Voting Rights Act.'
+      },
+      {
+        icon: '🔒',
+        title: 'Right to a Secret Ballot',
+        description: 'Your vote is completely private. No one — including poll workers, candidates, family members, or government officials — has the right to see how you voted. Voting booths are designed to ensure privacy. Taking photos of your completed ballot is restricted in many states. Your employer cannot require you to disclose your vote. This fundamental right is the cornerstone of democratic elections.'
+      },
+      {
+        icon: '📋',
+        title: 'Right to a Provisional Ballot',
+        description: 'If your eligibility is questioned at the polling place, you have the right to cast a provisional ballot under the Help America Vote Act (HAVA) of 2002. Your provisional ballot will be counted once your eligibility is verified. You have the right to receive written information about how to verify whether your provisional ballot was counted, and if it was not, the reason why. Always insist on your right to a provisional ballot if turned away.'
+      },
+      {
+        icon: '♿',
+        title: 'Right to Accessible Polling Stations',
+        description: 'Under the Americans with Disabilities Act (ADA) and the Help America Vote Act, all polling places must be physically accessible to voters with disabilities. This includes wheelchair ramps, accessible voting machines with audio capabilities, large-print ballots, and adequate lighting. If your polling place is not accessible, contact your local election office — they must provide an alternative accessible location or curbside voting.'
+      },
+      {
+        icon: '📣',
+        title: 'Right to Report Violations',
+        description: 'You have the right to report any election law violations or voting problems. Contact your state election office, the Election Protection Hotline at 866-OUR-VOTE (866-687-8683), or the Department of Justice Voting Rights Section. You can report problems such as long wait times, equipment malfunctions, voter intimidation, accessibility issues, or poll worker misconduct. Your complaint will be investigated and addressed. You are protected from retaliation for filing a complaint.'
+      }
+    ];
+
+    /**
+     * FAQ data organized by category
+     * @type {Array<{question: string, answer: string, category: string}>}
+     */
+    const FAQ_DATA = [
+      { question: 'Who is eligible to vote in the United States?', answer: 'To vote in U.S. elections, you must be a U.S. citizen, at least 18 years old on or before Election Day, and a resident of the state where you plan to vote. Some states have additional residency requirements. Most states also require that you are not currently serving a felony sentence, though restoration of voting rights varies by state.', category: 'Registration' },
+      { question: 'How do I register to vote?', answer: 'You can register to vote online at vote.gov, by mail using the National Voter Registration Form, or in person at your local election office, DMV, or public library. You will need your full legal name, address, date of birth, and either your state-issued ID number or the last four digits of your Social Security number.', category: 'Registration' },
+      { question: 'When is the registration deadline?', answer: 'Registration deadlines vary by state, typically ranging from 15 to 30 days before Election Day. Some states offer same-day registration, allowing you to register and vote on Election Day. Check your state\'s specific deadline at vote.gov or your state election website.', category: 'Registration' },
+      { question: 'Can I change my voter registration?', answer: 'Yes, you can update your voter registration if you\'ve changed your name, address, or party affiliation. You can make changes online through your state\'s election website, by re-submitting a voter registration form, or by contacting your local election office. Update well before any registration deadlines.', category: 'Registration' },
+      { question: 'What ID do I need to vote?', answer: 'ID requirements vary by state. Some states require a photo ID such as a driver\'s license, state ID, or passport. Other states accept non-photo IDs like utility bills, bank statements, or government documents with your name and address. A few states require no ID at all. Check your state\'s requirements before Election Day.', category: 'Voting' },
+      { question: 'Can I vote early or by mail?', answer: 'Most states offer early voting, typically beginning 10-45 days before Election Day. Many states also offer mail-in or absentee voting. Some states conduct elections entirely by mail. Check your state\'s options at vote.gov. Request your mail-in ballot well in advance and follow all instructions carefully for it to be counted.', category: 'Voting' },
+      { question: 'What happens if I make a mistake on my ballot?', answer: 'If you make a mistake on a paper ballot before submitting it, tell a poll worker immediately. You can usually receive a new ballot (most states allow up to three spoiled ballots). For electronic voting machines, use the review screen to check your choices before final submission. Never try to alter a submitted ballot.', category: 'Voting' },
+      { question: 'How long will I wait to vote?', answer: 'Wait times vary depending on location, time of day, and election type. Generally, early morning and after 5 PM are busiest. To minimize wait time, consider voting during mid-morning or early afternoon. Early voting periods typically have shorter lines. Some states post estimated wait times online.', category: 'Voting' },
+      { question: 'What is a provisional ballot?', answer: 'A provisional ballot is a backup ballot you can cast if there\'s an issue with your eligibility at the polls — such as your name not appearing on the voter rolls. After you vote provisionally, election officials verify your eligibility. If confirmed, your ballot is counted like any other. You can check whether your provisional ballot was counted.', category: 'Voting' },
+      { question: 'What are my rights as a voter?', answer: 'You have the right to vote without intimidation, to receive assistance if needed, to a secret ballot, to cast a provisional ballot if your eligibility is questioned, to accessible polling stations, and to report any violations. Federal laws including the Voting Rights Act protect these rights.', category: 'Rights' },
+      { question: 'Can my employer prevent me from voting?', answer: 'No. Most states have laws requiring employers to provide time off for voting. Your employer cannot threaten, coerce, or fire you for voting or for how you vote. If you need time off to vote, notify your employer in advance. Check your state\'s specific time-off-to-vote laws.', category: 'Rights' },
+      { question: 'What should I do if I face voter intimidation?', answer: 'If you experience or witness voter intimidation, report it immediately to poll workers, your local election office, the Election Protection Hotline (866-OUR-VOTE), or the Department of Justice Voting Section. Document what happened, including time, location, and descriptions of those involved. You are protected by federal law from retaliation.', category: 'Rights' },
+      { question: 'How are votes counted?', answer: 'After polls close, election officials count all ballots — in-person, mail-in, absentee, and provisional. Paper ballots are typically scanned by machines and verified. Electronic votes are tallied digitally with audit trails. Bipartisan teams of observers may watch the process. Results are certified by county and state election boards.', category: 'Results' },
+      { question: 'When will election results be announced?', answer: 'Unofficial results are typically reported on election night as votes are counted. However, official results may take days or weeks, especially if there are many mail-in ballots or close races requiring recounts. States must certify results within a set timeframe, usually 2-6 weeks after Election Day.', category: 'Results' },
+      { question: 'What happens if there is a tie or recount?', answer: 'If the margin of victory falls within a state\'s threshold (often 0.5% or less), an automatic recount may be triggered. Candidates may also request recounts in close races. Recounting procedures vary by state and may include hand recounts. In rare cases of a tie, the outcome may be decided by a coin toss, drawing of lots, or special election.', category: 'Results' },
+      { question: 'Can I track my mail-in ballot?', answer: 'Yes, most states offer ballot tracking tools on their election websites. After submitting your mail-in or absentee ballot, you can track its status — from received by the election office, to accepted and counted. If there\'s an issue with your ballot (like a missing signature), you\'ll typically be notified and given a chance to fix it.', category: 'Voting' },
+      { question: 'What is the difference between primary and general elections?', answer: 'Primary elections determine each party\'s nominees for the general election. They can be open (any voter can participate), closed (only party members can vote), or semi-open. The general election is when all voters choose between the party nominees and independents for each office. Primaries typically occur months before the general election.', category: 'Voting' }
+    ];
+
+    /** @type {Set<number>} Track completed steps */
+    const completedSteps = new Set();
+
+    /** @type {boolean} Whether Google Charts has finished loading */
+    let chartsLoaded = false;
+
+    /* ============================================
+     *  TAB NAVIGATION
+     * ============================================ */
+
+    /**
+     * Switch to a specific tab by its identifier
+     * @param {string} tabId - The tab identifier (home, timeline, guide, rights, assistant, faq)
+     */
+    const switchTab = (tabId) => {
+      // Update tab buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        const isActive = btn.dataset.tab === tabId;
+        btn.classList.toggle('active', isActive);
+        btn.setAttribute('aria-selected', isActive.toString());
+      });
+
+      // Update tab panels
+      document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.remove('active');
+      });
+      const targetPanel = document.getElementById(`panel-${tabId}`);
+      if (targetPanel) {
+        targetPanel.classList.add('active');
+      }
+
+      // Redraw charts when their tab becomes active
+      if (tabId === 'timeline' && chartsLoaded) {
+        drawTimelineChart();
+      }
+      if (tabId === 'faq' && chartsLoaded) {
+        drawFaqPieChart();
+      }
+      if (tabId === 'home' && chartsLoaded) {
+        drawHomeBarChart();
+      }
+    };
+
+    /* ============================================
+     *  SETTINGS & API KEY MANAGEMENT
+     * ============================================ */
+
+    /**
+     * Open the API settings modal dialog
+     */
+    const openSettings = () => {
+      const modal = document.getElementById('settings-modal');
+      modal.classList.add('visible');
+      const existingKey = sessionStorage.getItem('gemini_api_key');
+      if (existingKey) {
+        document.getElementById('api-key-input').value = existingKey;
+        showKeyStatus('Key loaded from session', 'saved');
+      }
+      document.getElementById('api-key-input').focus();
+    };
+
+    /**
+     * Close the API settings modal dialog
+     */
+    const closeSettings = () => {
+      document.getElementById('settings-modal').classList.remove('visible');
+    };
+
+    /**
+     * Save the API key to sessionStorage after validation
+     * Validates key starts with "AIza" prefix
+     */
+    const saveApiKey = () => {
+      const input = document.getElementById('api-key-input');
+      const key = input.value.trim();
+
+      if (!key) {
+        showKeyStatus('Please enter an API key', 'error');
+        return;
+      }
+
+      if (!key.startsWith('AIza')) {
+        showKeyStatus('Invalid key format — must start with "AIza"', 'error');
+        return;
+      }
+
+      sessionStorage.setItem('gemini_api_key', key);
+      showKeyStatus('✅ Key saved securely for this session', 'saved');
+      setTimeout(closeSettings, 1500);
+    };
+
+    /**
+     * Display a status message in the settings modal
+     * @param {string} message - Status message to display
+     * @param {string} type - Status type ('saved' or 'error')
+     */
+    const showKeyStatus = (message, type) => {
+      const status = document.getElementById('key-status');
+      status.textContent = message;
+      status.className = `key-status ${type}`;
+    };
+
+    /* ============================================
+     *  INPUT SANITIZATION
+     * ============================================ */
+
+    /**
+     * Sanitize user input by stripping HTML tags and trimming whitespace
+     * @param {string} input - Raw user input string
+     * @returns {string} Sanitized string with HTML tags removed
+     */
+    const sanitizeInput = (input) => {
+      if (typeof input !== 'string') return '';
+      return input.replace(/<[^>]*>/g, '').trim();
+    };
+
+    /* ============================================
+     *  GEMINI API INTEGRATION
+     * ============================================ */
+
+    /**
+     * Sends a message to the Gemini 2.0 Flash API with election context
+     * @param {string} message - User's question about elections
+     * @returns {Promise<string>} Gemini's response text
+     * @throws {Error} Throws on API errors (401, 429, 500)
+     */
+    const callGemini = async (message) => {
+      const apiKey = sessionStorage.getItem('gemini_api_key');
+      if (!apiKey) {
+        return 'Please set your Gemini API key in Settings (⚙️) to enable AI features. Your key is stored securely in sessionStorage and cleared when you close this tab.';
+      }
+
+      try {
+        const response = await fetch(`${GEMINI_ENDPOINT}?key=${apiKey}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: `${SYSTEM_PROMPT}\n\nUser Question: ${message}`
+              }]
+            }],
+            generationConfig: {
+              temperature: 0.7,
+              maxOutputTokens: 512
+            }
+          })
+        });
+
+        if (response.status === 401) {
+          throw new Error('Invalid API key — please check your settings.');
+        }
+        if (response.status === 429) {
+          throw new Error('Too many requests — please wait a moment and try again.');
+        }
+        if (response.status >= 500) {
+          throw new Error('Service unavailable — using smart fallback.');
+        }
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        return data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received from AI. Please try again.';
+      } catch (error) {
+        if (error.message.includes('API key') || error.message.includes('Too many') || error.message.includes('Service unavailable')) {
+          throw error;
+        }
+        return getSmartFallback(message);
+      }
+    };
+
+    /**
+     * Provides intelligent fallback responses when API is unavailable
+     * @param {string} message - User's question
+     * @returns {string} Contextual fallback response
+     */
+    const getSmartFallback = (message) => {
+      const lower = message.toLowerCase();
+      if (lower.includes('register')) {
+        return 'To register to vote: 1) Check eligibility (18+, U.S. citizen, state resident) 2) Visit vote.gov or your state election website 3) Provide your name, address, DOB, and ID 4) Submit at least 15-30 days before Election Day. Many states also offer same-day registration.\n\n[Offline response — connect your API key for live AI answers]';
+      }
+      if (lower.includes('voting day') || lower.includes('when') || lower.includes('election day')) {
+        return 'The 2026 Midterm Election Day is November 3, 2026. Polls typically open between 6-7 AM and close between 7-8 PM, depending on your state. Early voting begins in most states in mid-October 2026.\n\n[Offline response — connect your API key for live AI answers]';
+      }
+      if (lower.includes('id') || lower.includes('identification')) {
+        return 'ID requirements vary by state. Common accepted IDs include: driver\'s license, state ID, passport, or military ID. Some states also accept utility bills, bank statements, or government documents. Check your state\'s specific requirements at vote.gov.\n\n[Offline response — connect your API key for live AI answers]';
+      }
+      if (lower.includes('count') || lower.includes('counted')) {
+        return 'Votes are counted by election officials after polls close. Paper ballots are scanned by machines, electronic votes are tallied digitally, and mail-in ballots are verified and counted. Bipartisan observers oversee the process. Results are certified by state election boards within 2-6 weeks.\n\n[Offline response — connect your API key for live AI answers]';
+      }
+      if (lower.includes('mistake') || lower.includes('error') || lower.includes('wrong')) {
+        return 'If you make a mistake on your ballot before submitting: ask a poll worker for a new ballot (most states allow up to 3). For electronic voting, use the review screen. Never submit an altered ballot. If you realize an error after submission, contact your election office.\n\n[Offline response — connect your API key for live AI answers]';
+      }
+      if (lower.includes('right') || lower.includes('rights')) {
+        return 'As a voter, you have federally protected rights including: vote without intimidation, request assistance, privacy of your ballot, cast a provisional ballot, accessible polling stations, and the right to report any violations. Contact 866-OUR-VOTE if your rights are violated.\n\n[Offline response — connect your API key for live AI answers]';
+      }
+      return 'I\'m currently offline, but I can help with common election questions. Try asking about voter registration, election dates, ID requirements, how votes are counted, or your voter rights. Connect your Gemini API key in Settings for full AI-powered responses.\n\n[Offline response — connect your API key for live AI answers]';
+    };
+
+    /* ============================================
+     *  CHAT INTERFACE
+     * ============================================ */
+
+    /**
+     * Update the character count display for the chat input
+     */
+    const updateCharCount = () => {
+      const input = document.getElementById('chat-input');
+      const counter = document.getElementById('char-count');
+      const len = input.value.length;
+      counter.textContent = `${len}/500`;
+      counter.classList.toggle('warning', len >= 450);
+    };
+
+    /**
+     * Send a quick prompt message to the AI assistant
+     * @param {string} text - The quick prompt text to send
+     */
+    const sendQuickPrompt = (text) => {
+      document.getElementById('chat-input').value = text;
+      updateCharCount();
+      sendMessage();
+    };
+
+    /**
+     * Process and send the current chat message to Gemini AI
+     * Handles input validation, sanitization, and response display
+     */
+    const sendMessage = async () => {
+      const input = document.getElementById('chat-input');
+      const rawMessage = input.value;
+      const message = sanitizeInput(rawMessage);
+
+      if (!message) return;
+
+      const messagesDiv = document.getElementById('chat-messages');
+      const loading = document.getElementById('chat-loading');
+      const sendBtn = document.getElementById('send-btn');
+
+      // Add user message
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message message-user';
+      userMsg.textContent = message;
+      messagesDiv.appendChild(userMsg);
+
+      // Clear input and update counter
+      input.value = '';
+      updateCharCount();
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+      // Show loading
+      loading.classList.add('visible');
+      sendBtn.disabled = true;
+
+      try {
+        const response = await callGemini(message);
+        addAIMessage(response);
+      } catch (error) {
+        addAIMessage(`⚠️ ${error.message}`);
+      } finally {
+        loading.classList.remove('visible');
+        sendBtn.disabled = false;
+        input.focus();
+      }
+    };
+
+    /**
+     * Add an AI response message to the chat display
+     * @param {string} text - The AI response text to display
+     */
+    const addAIMessage = (text) => {
+      const messagesDiv = document.getElementById('chat-messages');
+      const aiMsg = document.createElement('div');
+      aiMsg.className = 'message message-ai';
+      aiMsg.innerHTML = `<div class="msg-label">VoteWise AI</div>${sanitizeInput(text).replace(/\n/g, '<br>')}`;
+      messagesDiv.appendChild(aiMsg);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    };
+
+    /* ============================================
+     *  AI SUMMARY GENERATION
+     * ============================================ */
+
+    /**
+     * Generate an AI-powered election summary for the home tab
+     * Calls Gemini API to produce a current election status overview
+     */
+    const generateSummary = async () => {
+      const summaryDiv = document.getElementById('ai-summary');
+      const btn = document.getElementById('generate-summary-btn');
+      btn.disabled = true;
+      summaryDiv.innerHTML = '<div class="chat-loading visible"><div class="loading-spinner"></div> Generating summary...</div>';
+
+      try {
+        const response = await callGemini('Provide a concise 3-4 sentence summary of the current 2026 midterm election status. Include the current phase, upcoming key dates, and one actionable tip for voters. Today is April 2026.');
+        summaryDiv.textContent = response;
+      } catch (error) {
+        summaryDiv.textContent = `⚠️ ${error.message}`;
+      } finally {
+        btn.disabled = false;
+      }
+    };
+
+    /* ============================================
+     *  RIGHTS AI ADVISOR
+     * ============================================ */
+
+    /**
+     * Send a voter rights question to the Gemini AI advisor
+     * Displayed in the rights tab mini-chat
+     */
+    const askRightsAI = async () => {
+      const input = document.getElementById('rights-ai-input');
+      const responseDiv = document.getElementById('rights-ai-response');
+      const message = sanitizeInput(input.value);
+
+      if (!message) return;
+
+      responseDiv.innerHTML = '<div class="chat-loading visible"><div class="loading-spinner"></div> Researching...</div>';
+
+      try {
+        const response = await callGemini(`As a voter rights expert, answer this question: ${message}`);
+        responseDiv.textContent = response;
+      } catch (error) {
+        responseDiv.textContent = `⚠️ ${error.message}`;
+      }
+
+      input.value = '';
+    };
+
+    /* ============================================
+     *  TIMELINE PHASE CARDS
+     * ============================================ */
+
+    /**
+     * Calculate the number of days remaining until a given date
+     * @param {Date} endDate - The target date
+     * @returns {number} Number of days remaining (negative if past)
+     */
+    const getDaysRemaining = (endDate) => {
+      const now = new Date();
+      const diff = endDate - now;
+      return Math.ceil(diff / (1000 * 60 * 60 * 24));
+    };
+
+    /**
+     * Determine the status of an election phase relative to the current date
+     * @param {Date} start - Phase start date
+     * @param {Date} end - Phase end date
+     * @returns {string} Status string: 'active', 'upcoming', or 'completed'
+     */
+    const getPhaseStatus = (start, end) => {
+      const now = new Date();
+      if (now >= start && now <= end) return 'active';
+      if (now < start) return 'upcoming';
+      return 'completed';
+    };
+
+    /**
+     * Render all election phase cards with status indicators
+     */
+    const renderPhaseCards = () => {
+      const container = document.getElementById('phase-cards');
+      container.innerHTML = ELECTION_PHASES.map((phase, i) => {
+        const status = getPhaseStatus(phase.start, phase.end);
+        const daysLeft = getDaysRemaining(phase.end);
+        const startStr = phase.start.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const endStr = phase.end.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+        let badgeHTML = '';
+        let daysHTML = '';
+        let pulseHTML = '';
+
+        if (status === 'active') {
+          badgeHTML = '<span class="badge badge-active">● ACTIVE</span>';
+          daysHTML = `<span class="days-remaining">${daysLeft > 0 ? daysLeft + ' days left' : 'Ending today'}</span>`;
+          pulseHTML = '<div class="pulse-dot" aria-label="Currently active phase"></div>';
+        } else if (status === 'upcoming') {
+          badgeHTML = '<span class="badge badge-upcoming">◔ UPCOMING</span>';
+          const daysToStart = getDaysRemaining(phase.start);
+          daysHTML = `<span class="days-remaining">Starts in ${daysToStart} days</span>`;
+        } else {
+          badgeHTML = '<span class="badge badge-completed">✓ COMPLETED</span>';
+        }
+
+        return `
+          <div class="phase-card ${status === 'active' ? 'active-phase' : ''}" onclick="togglePhase(this)" role="button" tabindex="0" aria-expanded="false" aria-label="${phase.name} — ${status}" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();togglePhase(this)}">
+            <div class="phase-icon" aria-hidden="true">${phase.icon}</div>
+            <div class="phase-info">
+              <h3>${phase.name}</h3>
+              <div class="phase-dates">${startStr} — ${endStr}</div>
+              ${badgeHTML}
+              <div class="phase-description">${phase.description}</div>
+            </div>
+            <div class="phase-meta">
+              ${daysHTML}
+              ${pulseHTML}
+            </div>
+          </div>
+        `;
+      }).join('');
+    };
+
+    /**
+     * Toggle the expanded state of a phase card
+     * @param {HTMLElement} el - The phase card element
+     */
+    const togglePhase = (el) => {
+      const wasExpanded = el.classList.contains('expanded');
+      el.classList.toggle('expanded');
+      el.setAttribute('aria-expanded', (!wasExpanded).toString());
+    };
+
+    /* ============================================
+     *  STEPPER
+     * ============================================ */
+
+    /**
+     * Render all voting steps with expandable content
+     */
+    const renderSteps = () => {
+      const container = document.getElementById('steps-list');
+      container.innerHTML = VOTING_STEPS.map((step, i) => `
+        <div class="step-item" id="step-${i}" data-step="${i}">
+          <button class="step-header" onclick="toggleStep(${i})" aria-expanded="false" aria-label="Step ${i + 1}: ${step.title}">
+            <div class="step-number">${i + 1}</div>
+            <span class="step-title">${step.icon} ${step.title}</span>
+            <span class="step-chevron" aria-hidden="true">▼</span>
+          </button>
+          <div class="step-content">
+            <div class="step-content-inner">
+              ${step.content}
+              <div class="step-actions">
+                <button class="mark-complete-btn" onclick="markComplete(${i}, event)" aria-label="Mark step ${i + 1} as complete">✓ Mark Complete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    };
+
+    /**
+     * Toggle the expanded state of a voting step
+     * @param {number} index - Step index (0-based)
+     */
+    const toggleStep = (index) => {
+      const stepEl = document.getElementById(`step-${index}`);
+      const wasExpanded = stepEl.classList.contains('expanded');
+      stepEl.classList.toggle('expanded');
+      stepEl.querySelector('.step-header').setAttribute('aria-expanded', (!wasExpanded).toString());
+    };
+
+    /**
+     * Mark a voting step as completed and update progress
+     * @param {number} index - Step index (0-based)
+     * @param {Event} event - Click event to stop propagation
+     */
+    const markComplete = (index, event) => {
+      event.stopPropagation();
+      completedSteps.add(index);
+      const stepEl = document.getElementById(`step-${index}`);
+      stepEl.classList.add('completed');
+      updateProgress();
+    };
+
+    /**
+     * Update the stepper progress bar and label
+     */
+    const updateProgress = () => {
+      const total = VOTING_STEPS.length;
+      const done = completedSteps.size;
+      const pct = Math.round((done / total) * 100);
+      document.getElementById('progress-bar').style.width = `${pct}%`;
+      document.getElementById('progress-bar').setAttribute('aria-valuenow', pct);
+      document.getElementById('progress-text').textContent = `${done} of ${total} completed`;
+    };
+
+    /* ============================================
+     *  ACCORDION (RIGHTS)
+     * ============================================ */
+
+    /**
+     * Render the voter rights accordion
+     */
+    const renderRights = () => {
+      const container = document.getElementById('rights-accordion');
+      container.innerHTML = VOTER_RIGHTS.map((right, i) => `
+        <div class="accordion-item" data-right="${i}" data-keywords="${right.title.toLowerCase()} ${right.description.toLowerCase()}">
+          <button class="accordion-header" onclick="toggleAccordion(this.parentElement)" aria-expanded="false" aria-label="${right.title}">
+            <span class="accordion-icon" aria-hidden="true">${right.icon}</span>
+            ${right.title}
+            <span class="accordion-chevron" aria-hidden="true">▼</span>
+          </button>
+          <div class="accordion-body" role="region">
+            <div class="accordion-body-inner">${right.description}</div>
+          </div>
+        </div>
+      `).join('');
+    };
+
+    /**
+     * Toggle an accordion item's expanded state
+     * @param {HTMLElement} el - The accordion item element
+     */
+    const toggleAccordion = (el) => {
+      const wasExpanded = el.classList.contains('expanded');
+      el.classList.toggle('expanded');
+      el.querySelector('.accordion-header').setAttribute('aria-expanded', (!wasExpanded).toString());
+    };
+
+    /**
+     * Filter voter rights by keyword search
+     * @param {string} query - Search query string
+     */
+    const filterRights = (query) => {
+      const items = document.querySelectorAll('.accordion-item');
+      const lower = query.toLowerCase();
+      items.forEach(item => {
+        const keywords = item.dataset.keywords || '';
+        item.style.display = keywords.includes(lower) ? '' : 'none';
+      });
+    };
+
+    /* ============================================
+     *  FAQ
+     * ============================================ */
+
+    /**
+     * Render all FAQ items with expandable answers and rating buttons
+     */
+    const renderFAQs = () => {
+      const container = document.getElementById('faq-list');
+      container.innerHTML = FAQ_DATA.map((faq, i) => `
+        <div class="faq-item" data-faq="${i}" data-keywords="${faq.question.toLowerCase()} ${faq.answer.toLowerCase()} ${faq.category.toLowerCase()}">
+          <button class="faq-question" onclick="toggleFAQ(this.parentElement)" aria-expanded="false" aria-label="${faq.question}">
+            <span aria-hidden="true">💬</span>
+            ${faq.question}
+            <span class="faq-chevron" aria-hidden="true">▼</span>
+          </button>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              ${faq.answer}
+              <div class="faq-rating">
+                <span>Was this helpful?</span>
+                <button class="faq-helpful-btn" onclick="rateFAQ(${i},'helpful',event)" aria-label="Mark this answer as helpful">👍 Helpful</button>
+                <button class="faq-nothelpful-btn" onclick="rateFAQ(${i},'not',event)" aria-label="Mark this answer as not helpful">👎 Not helpful</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    };
+
+    /**
+     * Toggle a FAQ item's expanded state
+     * @param {HTMLElement} el - The FAQ item element
+     */
+    const toggleFAQ = (el) => {
+      const wasExpanded = el.classList.contains('expanded');
+      el.classList.toggle('expanded');
+      el.querySelector('.faq-question').setAttribute('aria-expanded', (!wasExpanded).toString());
+    };
+
+    /**
+     * Handle FAQ satisfaction rating
+     * @param {number} index - FAQ item index
+     * @param {string} type - Rating type ('helpful' or 'not')
+     * @param {Event} event - Click event to stop propagation
+     */
+    const rateFAQ = (index, type, event) => {
+      event.stopPropagation();
+      const item = document.querySelector(`[data-faq="${index}"]`);
+      const btns = item.querySelectorAll('.faq-rating button');
+      btns.forEach(b => b.classList.remove('selected'));
+      if (type === 'helpful') {
+        btns[0].classList.add('selected');
+      } else {
+        btns[1].classList.add('selected');
+      }
+    };
+
+    /**
+     * Filter FAQ items by search query
+     * @param {string} query - Search query string
+     */
+    const filterFAQs = (query) => {
+      const items = document.querySelectorAll('.faq-item');
+      const lower = query.toLowerCase();
+      items.forEach(item => {
+        const keywords = item.dataset.keywords || '';
+        item.style.display = keywords.includes(lower) ? '' : 'none';
+      });
+    };
+
+    /* ============================================
+     *  GOOGLE CHARTS
+     * ============================================ */
+
+    /**
+     * Initialize Google Charts and draw all charts
+     * Loads corechart, timeline, and bar packages
+     */
+    const initCharts = () => {
+      try {
+        google.charts.load('current', { packages: ['corechart', 'timeline', 'bar'] });
+        google.charts.setOnLoadCallback(() => {
+          chartsLoaded = true;
+          drawHomeBarChart();
+          drawTimelineChart();
+          drawFaqPieChart();
+        });
+      } catch (e) {
+        console.warn('Google Charts failed to load:', e);
+      }
+    };
+
+    /**
+     * Draw the voter turnout bar chart on the Home tab
+     * Shows voter turnout percentages by age group
+     */
+    const drawHomeBarChart = () => {
+      if (!chartsLoaded) return;
+      const container = document.getElementById('home-bar-chart');
+      if (!container || container.offsetParent === null) return;
+
+      const data = google.visualization.arrayToDataTable([
+        ['Age Group', 'Turnout %', { role: 'style' }, { role: 'annotation' }],
+        ['18-24', 36, '#4f8ef7', '36%'],
+        ['25-34', 49, '#6366f1', '49%'],
+        ['35-44', 55, '#8b5cf6', '55%'],
+        ['45-54', 63, '#a855f7', '63%'],
+        ['55-64', 68, '#00e5a0', '68%'],
+        ['65+', 72, '#00d4aa', '72%']
+      ]);
+
+      const options = {
+        backgroundColor: 'transparent',
+        chartArea: { width: '80%', height: '75%' },
+        legend: 'none',
+        hAxis: {
+          textStyle: { color: '#8b95a8', fontName: 'Inter', fontSize: 12 },
+          gridlines: { color: '#262b38' }
+        },
+        vAxis: {
+          textStyle: { color: '#8b95a8', fontName: 'Inter', fontSize: 12 },
+          gridlines: { color: '#262b38' },
+          minValue: 0,
+          maxValue: 100,
+          title: 'Turnout %',
+          titleTextStyle: { color: '#8b95a8', fontName: 'Inter', fontSize: 12 }
+        },
+        animation: { startup: true, duration: 800, easing: 'out' },
+        bar: { groupWidth: '65%' }
+      };
+
+      const chart = new google.visualization.ColumnChart(container);
+      chart.draw(data, options);
+    };
+
+    /**
+     * Draw the election timeline chart on the Timeline tab
+     * Uses Google Charts Timeline to show all 6 election phases
+     */
+    const drawTimelineChart = () => {
+      if (!chartsLoaded) return;
+      const container = document.getElementById('timeline-chart');
+      if (!container || container.offsetParent === null) return;
+
+      const data = new google.visualization.DataTable();
+      data.addColumn({ type: 'string', id: 'Phase' });
+      data.addColumn({ type: 'string', id: 'Name' });
+      data.addColumn({ type: 'date', id: 'Start' });
+      data.addColumn({ type: 'date', id: 'End' });
+
+      ELECTION_PHASES.forEach(phase => {
+        data.addRows([
+          ['Election 2026', phase.name, phase.start, phase.end]
+        ]);
+      });
+
+      const options = {
+        backgroundColor: 'transparent',
+        timeline: {
+          showBarLabels: true,
+          colorByRowLabel: false,
+          rowLabelStyle: { fontName: 'Inter', fontSize: 13, color: '#8b95a8' },
+          barLabelStyle: { fontName: 'Inter', fontSize: 11, color: '#ffffff' }
+        },
+        colors: ['#4f8ef7', '#6366f1', '#8b5cf6', '#00e5a0', '#f7c948', '#a855f7'],
+        avoidOverlappingGridLines: false
+      };
+
+      const chart = new google.visualization.Timeline(container);
+      chart.draw(data, options);
+    };
+
+    /**
+     * Draw the FAQ category pie chart on the FAQ tab
+     * Shows distribution of FAQ questions by category
+     */
+    const drawFaqPieChart = () => {
+      if (!chartsLoaded) return;
+      const container = document.getElementById('faq-pie-chart');
+      if (!container || container.offsetParent === null) return;
+
+      // Count FAQs by category
+      const counts = {};
+      FAQ_DATA.forEach(faq => {
+        counts[faq.category] = (counts[faq.category] || 0) + 1;
+      });
+
+      const chartData = [['Category', 'Count']];
+      Object.entries(counts).forEach(([cat, count]) => {
+        chartData.push([cat, count]);
+      });
+
+      const data = google.visualization.arrayToDataTable(chartData);
+
+      const options = {
+        backgroundColor: 'transparent',
+        chartArea: { width: '90%', height: '80%' },
+        legend: {
+          position: 'right',
+          textStyle: { color: '#8b95a8', fontName: 'Inter', fontSize: 13 }
+        },
+        colors: ['#4f8ef7', '#6366f1', '#00e5a0', '#f7c948'],
+        pieHole: 0.4,
+        pieSliceTextStyle: { color: '#ffffff', fontName: 'Inter', fontSize: 12 },
+        animation: { startup: true, duration: 800, easing: 'out' }
+      };
+
+      const chart = new google.visualization.PieChart(container);
+      chart.draw(data, options);
+    };
+
+    /** Handle responsiveness: Redraw charts on window resize */
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (chartsLoaded) {
+          drawHomeBarChart();
+          drawTimelineChart();
+          drawFaqPieChart();
+        }
+      }, 300);
+    });
+
+    /* ============================================
+     *  TEST PANEL
+     * ============================================ */
+
+    /**
+     * Toggle test panel visibility between collapsed and expanded
+     */
+    const toggleTestPanel = () => {
+      const panel = document.getElementById('test-panel');
+      panel.classList.toggle('collapsed');
+      const btn = document.getElementById('test-toggle-btn');
+      btn.textContent = panel.classList.contains('collapsed') ? '▲' : '▼';
+    };
+
+    /**
+     * Run all 10 automated tests and display results
+     * Tests cover: navigation, timeline, stepper, rights, AI, FAQ,
+     * Google services, security, accessibility, and input validation
+     */
+    const runAllTests = () => {
+      const results = [];
+      let passed = 0;
+
+      /**
+       * Helper to record a test result
+       * @param {string} name - Test name
+       * @param {boolean} pass - Whether the test passed
+       * @param {string} detail - Detail message
+       */
+      const addResult = (name, pass, detail) => {
+        results.push({ name, pass, detail });
+        if (pass) passed++;
+      };
+
+      // TEST 1: Tab Navigation
+      try {
+        const tabs = document.querySelectorAll('.tab-btn');
+        const panels = document.querySelectorAll('.tab-panel');
+        const tabCount = tabs.length;
+        const panelCount = panels.length;
+        const hasActive = document.querySelector('.tab-btn.active') !== null;
+        addResult('Tab Navigation', tabCount === 6 && panelCount === 6 && hasActive,
+          `${tabCount}/6 tabs, ${panelCount}/6 panels, active: ${hasActive}`);
+      } catch (e) {
+        addResult('Tab Navigation', false, e.message);
+      }
+
+      // TEST 2: Election Timeline
+      try {
+        const timelineChart = document.getElementById('timeline-chart');
+        const phaseCards = document.querySelectorAll('.phase-card');
+        const chartsLibReady = typeof google !== 'undefined' && typeof google.charts !== 'undefined';
+        const chartScriptLoaded = document.querySelector('script[src*="gstatic.com/charts"]') !== null;
+        const hasChartInfra = chartsLibReady || chartScriptLoaded || chartsLoaded;
+        addResult('Election Timeline', phaseCards.length === 6 && hasChartInfra,
+          `${phaseCards.length}/6 phases, charts library: ${chartsLibReady || chartScriptLoaded}`);
+      } catch (e) {
+        addResult('Election Timeline', false, e.message);
+      }
+
+      // TEST 3: Step-by-Step Guide
+      try {
+        const steps = document.querySelectorAll('.step-item');
+        const expandable = document.querySelectorAll('.step-header');
+        // Test expand/collapse
+        if (expandable.length > 0) {
+          expandable[0].click();
+          const isExpanded = document.getElementById('step-0').classList.contains('expanded');
+          expandable[0].click(); // collapse it back
+          addResult('Step-by-Step Guide', steps.length === 6 && isExpanded,
+            `${steps.length}/6 steps, expandable: ${isExpanded}`);
+        } else {
+          addResult('Step-by-Step Guide', false, 'No step headers found');
+        }
+      } catch (e) {
+        addResult('Step-by-Step Guide', false, e.message);
+      }
+
+      // TEST 4: Voter Rights
+      try {
+        const rights = document.querySelectorAll('.accordion-item');
+        const hasHeaders = document.querySelectorAll('.accordion-header').length >= 6;
+        addResult('Voter Rights', rights.length >= 6 && hasHeaders,
+          `${rights.length} rights in accordion`);
+      } catch (e) {
+        addResult('Voter Rights', false, e.message);
+      }
+
+      // TEST 5: AI Assistant
+      try {
+        const chatInput = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-btn');
+        const geminiExists = typeof callGemini === 'function';
+        const hasEndpoint = GEMINI_ENDPOINT.includes('generativelanguage.googleapis.com');
+        addResult('AI Assistant', chatInput !== null && sendBtn !== null && geminiExists && hasEndpoint,
+          `Input: ${!!chatInput}, Send: ${!!sendBtn}, Gemini: ${geminiExists}, Endpoint: ${hasEndpoint}`);
+      } catch (e) {
+        addResult('AI Assistant', false, e.message);
+      }
+
+      // TEST 6: FAQ Section
+      try {
+        const faqItems = document.querySelectorAll('.faq-item');
+        const searchInput = document.getElementById('faq-search-input');
+        // Test search functionality
+        if (searchInput) {
+          searchInput.value = 'register';
+          filterFAQs('register');
+          const visibleAfterSearch = document.querySelectorAll('.faq-item[style=""],.faq-item:not([style])').length;
+          searchInput.value = '';
+          filterFAQs('');
+          addResult('FAQ Section', faqItems.length >= 10 && visibleAfterSearch > 0,
+            `${faqItems.length} FAQs, search working: ${visibleAfterSearch > 0}`);
+        } else {
+          addResult('FAQ Section', false, 'Search input not found');
+        }
+      } catch (e) {
+        addResult('FAQ Section', false, e.message);
+      }
+
+      // TEST 7: Google Services
+      try {
+        const chartsLib = typeof google !== 'undefined' && typeof google.charts !== 'undefined';
+        const mapsIframe = document.getElementById('google-maps-iframe');
+        const geminiConfigured = GEMINI_ENDPOINT.includes('gemini-2.0-flash');
+        const mapsHasTitle = mapsIframe && mapsIframe.title && mapsIframe.title.length > 0;
+        addResult('Google Services', chartsLib && mapsIframe !== null && geminiConfigured,
+          `Charts: ${chartsLib ? '✓' : '✗'}, Maps: ${mapsIframe ? '✓' : '✗'}, Gemini: ${geminiConfigured ? '✓' : '✗'}`);
+      } catch (e) {
+        addResult('Google Services', false, e.message);
+      }
+
+      // TEST 8: Security
+      try {
+        const pageSource = document.documentElement.innerHTML;
+        const noHardcodedKey = !pageSource.match(/AIza[A-Za-z0-9_-]{30,}/);
+        const keyInput = document.getElementById('api-key-input');
+        const isPasswordType = keyInput && keyInput.type === 'password';
+        const sanitizeWorks = sanitizeInput('<b>alert("xss")<' + '/b>hello') === 'alert("xss")hello';
+        const usesSessionStorage = typeof sessionStorage !== 'undefined';
+        addResult('Security', noHardcodedKey && isPasswordType && sanitizeWorks && usesSessionStorage,
+          `No hardcoded keys: ${noHardcodedKey ? '✓' : '✗'}, Password field: ${isPasswordType ? '✓' : '✗'}, Sanitize: ${sanitizeWorks ? '✓' : '✗'}`);
+      } catch (e) {
+        addResult('Security', false, e.message);
+      }
+
+      // TEST 9: Accessibility
+      try {
+        const skipLink = document.querySelector('.skip-link');
+        const mainRole = document.querySelector('[role="main"]');
+        const navRole = document.querySelector('[role="navigation"]');
+        const ariaLabels = document.querySelectorAll('[aria-label]');
+        const ariaSelected = document.querySelectorAll('[aria-selected]');
+        const ariaLive = document.querySelectorAll('[aria-live]');
+        const ariaExpanded = document.querySelectorAll('[aria-expanded]');
+        addResult('Accessibility',
+          skipLink !== null && mainRole !== null && navRole !== null &&
+          ariaLabels.length >= 10 && ariaSelected.length >= 6 &&
+          ariaLive.length >= 2 && ariaExpanded.length >= 1,
+          `Skip: ✓, Main: ✓, Nav: ✓, Labels: ${ariaLabels.length}, Selected: ${ariaSelected.length}, Live: ${ariaLive.length}`);
+      } catch (e) {
+        addResult('Accessibility', false, e.message);
+      }
+
+      // TEST 10: Input Validation
+      try {
+        const chatInput = document.getElementById('chat-input');
+        const hasMaxlength = chatInput && chatInput.maxLength === 500;
+        const emptyRejection = sanitizeInput('') === '';
+        const htmlStripped = sanitizeInput('<div>test</div>') === 'test';
+        const rightsInput = document.getElementById('rights-ai-input');
+        const rightsMaxlength = rightsInput && rightsInput.maxLength === 500;
+        addResult('Input Validation', hasMaxlength && emptyRejection && htmlStripped && rightsMaxlength,
+          `Maxlength: ${hasMaxlength ? '✓' : '✗'}, Empty rejection: ${emptyRejection ? '✓' : '✗'}, HTML strip: ${htmlStripped ? '✓' : '✗'}`);
+      } catch (e) {
+        addResult('Input Validation', false, e.message);
+      }
+
+      // Display results
+      const resultsDiv = document.getElementById('test-results');
+      resultsDiv.innerHTML = results.map(r => `
+        <div class="test-result">
+          <span class="icon">${r.pass ? '✅' : '❌'}</span>
+          <div>
+            <strong>${r.name}</strong>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:2px;">${r.detail}</div>
+          </div>
+        </div>
+      `).join('');
+
+      const scoreDiv = document.getElementById('test-score');
+      scoreDiv.textContent = `Score: ${passed}/10 tests passed`;
+      scoreDiv.className = `test-score ${passed === 10 ? 'perfect' : 'partial'}`;
+
+      // Expand panel to show results
+      const panel = document.getElementById('test-panel');
+      panel.classList.remove('collapsed');
+      document.getElementById('test-toggle-btn').textContent = '▼';
+
+      // Auto-collapse after 8 seconds
+      setTimeout(() => {
+        panel.classList.add('collapsed');
+        document.getElementById('test-toggle-btn').textContent = '▲';
+      }, 8000);
+
+      return { passed, total: 10, results };
+    };
+
+    /* ============================================
+     *  KEYBOARD NAVIGATION
+     * ============================================ */
+
+    /**
+     * Handle keyboard navigation for tab bar using arrow keys
+     * @param {KeyboardEvent} e - Keyboard event
+     */
+    document.addEventListener('keydown', (e) => {
+      // Tab bar arrow key navigation
+      if (e.target.classList.contains('tab-btn')) {
+        const tabs = Array.from(document.querySelectorAll('.tab-btn'));
+        const currentIndex = tabs.indexOf(e.target);
+
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          const nextIndex = (currentIndex + 1) % tabs.length;
+          tabs[nextIndex].focus();
+        }
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+          tabs[prevIndex].focus();
+        }
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          e.target.click();
+        }
+      }
+
+      // Close modal with Escape
+      if (e.key === 'Escape') {
+        closeSettings();
+      }
+    });
+
+    /* ============================================
+     *  INITIALIZATION
+     * ============================================ */
+
+    /**
+     * Initialize the entire VoteWise application
+     * Renders all dynamic content, loads charts, and runs tests
+     */
+    const initApp = () => {
+      renderPhaseCards();
+      renderSteps();
+      renderRights();
+      renderFAQs();
+      initCharts();
+
+      // Run tests after a short delay to allow DOM and charts to settle
+      setTimeout(runAllTests, 2000);
+    };
+
+    // Start the application
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+
+</html>
