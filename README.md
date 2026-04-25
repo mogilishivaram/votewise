@@ -8,8 +8,8 @@
 <h1 align="center">🗳️ VoteWise</h1>
 
 <p align="center">
-  <strong>Your AI-Powered Election Process Assistant</strong><br/>
-  <em>An interactive, accessible, and secure single-file web application that demystifies the U.S. election process — built for the PromptWars 2026 Virtual Hackathon.</em>
+  <strong>Your AI-Powered Indian Election Process Assistant</strong><br/>
+  <em>An interactive, accessible, and secure single-file web application that demystifies the Indian election process — built for the PromptWars 2026 Virtual Hackathon.</em>
 </p>
 
 <p align="center">
@@ -26,40 +26,43 @@
 
 ## 🎯 Problem Statement
 
-Millions of eligible voters skip elections simply because the process feels overwhelming — confusing registration deadlines, unclear timelines, and scattered information. **VoteWise** tackles this head-on by consolidating everything a voter needs into a single, intuitive, AI-powered interface.
+Millions of eligible Indian voters skip elections simply because the process feels overwhelming — confusing EPIC card procedures, unclear EVM/VVPAT processes, and scattered information. **VoteWise** tackles this head-on by consolidating everything a voter needs into a single, intuitive, AI-powered interface focused on the **Indian electoral system**.
+
+---
 
 ## ✨ Features
 
 ### 🏠 Dashboard Home
-An at-a-glance overview of the 2026 U.S. Midterm Election: key stats, current election phase, a voter turnout chart (Google Charts), and an AI-generated election summary powered by Gemini.
+An at-a-glance overview of the Lok Sabha 2029 election cycle: key stats, current election phase, a voter turnout chart (Google Charts — India 2024 data), and an AI-generated election summary powered by Gemini.
 
 ### 📅 Interactive Election Timeline
-A Google Charts-powered **Timeline visualization** mapping all 6 election phases — from Voter Registration through Results Declaration — with expandable detail cards showing real-time countdown badges (Completed / Active / Upcoming).
+A Google Charts-powered **Timeline visualization** mapping all 6 Indian election phases — from Model Code of Conduct through Counting & Results Declaration — with expandable detail cards showing real-time countdown badges (Completed / Active / Upcoming).
 
 ### 📋 Step-by-Step Voter Guide
-A 6-step interactive stepper that walks users through the entire voting journey:
-1. **Check Eligibility** — Age, citizenship, and residency requirements
-2. **Register to Vote** — Online, by mail, or in-person options
-3. **Research Candidates** — Platforms, debates, and voter guides
-4. **Locate Polling Station** — Integrated **Google Maps** embed
-5. **Cast Your Vote** — Election Day procedures and alternatives
-6. **Track Your Ballot** — Post-election verification steps
+A 6-step interactive stepper that walks users through the complete Indian voting journey:
+1. **Check Voter Eligibility** — Age, citizenship, and constituency requirements
+2. **Get Your EPIC Card (Voter ID)** — Apply free at nvsp.in or via BLO
+3. **Find Your Polling Booth** — Via electoralsearch.eci.gov.in or Helpline 1950
+4. **Carry Valid ID to Polling Booth** — EPIC or 12 ECI-approved alternatives
+5. **Cast Your Vote Using EVM** — Blue button, green light + beep confirms
+6. **Verify via VVPAT Slip** — 7-second paper confirmation
 
-Users can mark steps as complete with persistent progress tracking.
+Users can mark steps as complete with persistent progress tracking. Includes an embedded **Google Maps** iframe showing the **Election Commission of India** headquarters in New Delhi with directions link.
 
 ### ⚖️ Know Your Rights
-An accordion-based reference of **6+ federally protected voter rights**, each with detailed explanations. Includes a dedicated **AI-powered Q&A input** — ask any rights-related question and get an instant, non-partisan answer from Gemini.
+An accordion-based reference of **6 constitutionally protected Indian voter rights**, including Article 326, NOTA (Supreme Court 2013), Section 135B paid holiday, and PwD accessibility rights. Includes a dedicated **AI-powered Q&A input** — ask any rights-related question and get an instant, non-partisan answer from Gemini.
 
 ### 🤖 AI Election Assistant
 A full conversational chatbot powered by **Google Gemini 2.0 Flash**:
-- Context-aware system prompt with complete 2026 election data
+- Context-aware system prompt with complete Indian election data (ECI, EVM, VVPAT, NOTA, EPIC)
 - Quick-action suggestion chips for common questions
 - Real-time typing indicator and streamed responses
+- India-specific offline fallback responses (register, EPIC, EVM, NOTA, booth, results, rights)
 - Input sanitization (XSS prevention) and 500-character validation
 - Secure API key management via session-based Settings modal
 
 ### ❓ FAQ Section
-A searchable library of **17+ frequently asked questions** organized by category (Registration, Voting, Rights, Results), with a **Google Charts pie chart** showing question distribution. Real-time search filtering across all FAQ entries.
+A searchable library of **17 India-specific frequently asked questions** organized by category (Registration, Voting, Rights, Results), with a **Google Charts donut pie chart** showing question distribution. Real-time search filtering across all FAQ entries.
 
 ### ♿ Accessibility (WCAG 2.1)
 - Skip-to-content navigation link
@@ -75,36 +78,15 @@ A searchable library of **17+ frequently asked questions** organized by category
 - HTML/XSS sanitization on all user inputs
 - Content Security Policy (CSP) meta tag
 
+### ⚡ Performance
+- **Lazy chart loading** — Google Charts drawn only when their tab becomes visible, not all at once at startup
+- Single-file architecture with no build tools or framework overhead
+
 ---
 
 ## 📸 Screenshots
 
-<table>
-  <tr>
-    <td align="center"><strong>🏠 Home</strong></td>
-    <td align="center"><strong>📅 Timeline</strong></td>
-  </tr>
-  <tr>
-    <td><img src="screenshots/home.png" width="400" alt="VoteWise Home"/></td>
-    <td><img src="screenshots/timeline.png" width="400" alt="VoteWise Timeline"/></td>
-  </tr>
-  <tr>
-    <td align="center"><strong>📋 Voter Guide</strong></td>
-    <td align="center"><strong>⚖️ Rights</strong></td>
-  </tr>
-  <tr>
-    <td><img src="screenshots/guide.png" width="400" alt="VoteWise Guide"/></td>
-    <td><img src="screenshots/rights.png" width="400" alt="VoteWise Rights"/></td>
-  </tr>
-  <tr>
-    <td align="center"><strong>🤖 AI Help</strong></td>
-    <td align="center"><strong>❓ FAQ</strong></td>
-  </tr>
-  <tr>
-    <td><img src="screenshots/ai-help.png" width="400" alt="VoteWise AI Help"/></td>
-    <td><img src="screenshots/faq.png" width="400" alt="VoteWise FAQ"/></td>
-  </tr>
-</table>
+> 🔄 **Screenshots coming soon** — take fresh screenshots of the India-content app by opening `index.html` in your browser and saving images to the `screenshots/` folder.
 
 ---
 
@@ -114,8 +96,8 @@ A searchable library of **17+ frequently asked questions** organized by category
 |---|---|
 | **Frontend** | HTML5, CSS3, Vanilla JavaScript (single-file architecture) |
 | **AI Engine** | Google Gemini 2.0 Flash (`generativelanguage.googleapis.com`) |
-| **Charts** | Google Charts API (Timeline + Pie + Bar charts) |
-| **Maps** | Google Maps Embed API |
+| **Charts** | Google Charts API (Timeline + Column + Pie/Donut charts) |
+| **Maps** | Google Maps Embed API — Election Commission of India, New Delhi |
 | **Typography** | Google Fonts — Inter (body) + Outfit (headings) |
 | **Design** | Dark theme, glassmorphism, CSS custom properties, gradient accents |
 | **Testing** | Built-in 10-point automated test suite |
@@ -129,9 +111,29 @@ VoteWise deeply integrates **4 Google Services**, all within a single HTML file:
 | # | Service | Usage |
 |---|---|---|
 | 1 | **Google Gemini 2.0 Flash** | AI chatbot for election Q&A + AI-powered rights advisor + home page election summary |
-| 2 | **Google Charts** | Timeline visualization (election phases), Bar chart (voter turnout by age), Pie chart (FAQ categories) |
-| 3 | **Google Maps Embed** | Interactive polling station locator on the Voter Guide tab |
+| 2 | **Google Charts** | Timeline visualization (Lok Sabha phases), Column chart (voter turnout by age — India 2024), Donut pie chart (FAQ categories) |
+| 3 | **Google Maps Embed** | Interactive map showing Election Commission of India headquarters in New Delhi |
 | 4 | **Google Fonts** | Inter (400–700) for body text, Outfit (500–800) for headings |
+
+---
+
+## 🇮🇳 India Election Content
+
+VoteWise is fully localized for the **Indian electoral system**:
+
+| Feature | India-Specific Content |
+|---|---|
+| **Election Body** | Election Commission of India (ECI) — eci.gov.in |
+| **Voter ID** | EPIC Card — apply free at nvsp.in |
+| **Booth Search** | electoralsearch.eci.gov.in |
+| **Voter Helpline** | 1950 |
+| **Voting Technology** | EVM (Electronic Voting Machine) + VVPAT |
+| **Special Feature** | NOTA (None of the Above) — Supreme Court 2013 |
+| **Election Timeline** | 6 Lok Sabha 2029 phases |
+| **Voter Rights** | Article 326, Section 135B RPA, PwD accessibility |
+| **Maps** | Election Commission of India HQ, New Delhi |
+| **Turnout Chart** | India 2024 Lok Sabha data (18–25: 58%, 60+: 69%) |
+| **Violations** | Report via cVIGIL app or Voter Helpline 1950 |
 
 ---
 
@@ -203,7 +205,7 @@ VoteWise/
 └── .gitignore
 ```
 
-> **Single-file architecture**: The entire application — 3,100+ lines of HTML, CSS, and JavaScript — lives in one self-contained `index.html`. No build tools, no dependencies, no framework overhead. Just open and run.
+> **Single-file architecture**: The entire application — 3,150+ lines of HTML, CSS, and JavaScript — lives in one self-contained `index.html`. No build tools, no dependencies, no framework overhead. Just open and run.
 
 ---
 
@@ -213,8 +215,8 @@ VoteWise/
 |---|---|
 | Single-file HTML application | ✅ |
 | Google Gemini AI integration | ✅ |
-| Google Charts (2+ chart types) | ✅ |
-| Google Maps integration | ✅ |
+| Google Charts (2+ chart types) | ✅ Timeline + Column + Donut Pie |
+| Google Maps integration | ✅ Election Commission of India, New Delhi |
 | 10-point automated test suite | ✅ 10/10 |
 | Responsive design | ✅ |
 | Accessibility (WCAG 2.1) | ✅ |
@@ -226,6 +228,8 @@ VoteWise/
 
 ## 🌟 Key Design Decisions
 
+- **India-first content** — All election data, rights, FAQs, and fallbacks reflect the Indian electoral system (ECI, EVM, VVPAT, NOTA, EPIC)
+- **Lazy chart rendering** — Charts draw only when their tab is visited, improving initial load performance
 - **Dark-first UI** — Reduces eye strain for extended research sessions; uses a curated color palette with accent glows
 - **Progressive disclosure** — Timeline cards and guide steps expand on click, keeping the initial view clean
 - **Session-only API storage** — API keys never touch `localStorage` or cookies; they vanish when the tab closes
@@ -248,4 +252,4 @@ Built with ❤️ using [Google Antigravity](https://blog.google/technology/goog
   <img src="https://img.shields.io/badge/Made_with-❤️-red?style=flat-square" alt="Made with love"/>
 </p>
 
-<p align="center"><em>Democracy works best when everyone participates. 🗳️</em></p>
+<p align="center"><em>Every vote counts. Every voter matters. 🗳️</em></p>

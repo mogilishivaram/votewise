@@ -878,10 +878,29 @@
       min-height: 24px;
     }
 
-    /* === CHARTS === */
     .chart-container {
       width: 100%;
       min-height: 200px;
+    }
+
+    .gemini-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      background: linear-gradient(135deg, rgba(79,142,247,0.15), rgba(139,92,246,0.15));
+      color: var(--accent);
+      border: 1px solid rgba(79,142,247,0.25);
+      letter-spacing: 0.3px;
+    }
+
+    #google-maps-iframe {
+      width: 100%;
+      height: 300px;
+      border-radius: var(--radius) var(--radius) 0 0;
     }
 
     /* === AI CHAT === */
@@ -1606,8 +1625,8 @@
           </div>
           <div class="stat-card">
             <div class="stat-icon" aria-label="Calendar icon">📅</div>
-            <div class="stat-number">Nov 4</div>
-            <div class="stat-label">Voting Day 2026</div>
+            <div class="stat-number">Lok Sabha</div>
+            <div class="stat-label">2029 Next Election</div>
           </div>
           <div class="stat-card">
             <div class="stat-icon" aria-label="Shield icon">🛡️</div>
@@ -1617,15 +1636,15 @@
         </div>
 
         <div class="home-charts-section">
-          <h2>Voter Turnout by Age Group</h2>
+          <h2>Voter Turnout by Age Group — India 2024</h2>
           <div class="chart-wrapper">
             <div id="home-bar-chart" class="chart-container" style="min-height:300px;"
-              aria-label="Bar chart showing voter turnout by age group"></div>
+              aria-label="Bar chart showing voter turnout by age group in India 2024"></div>
           </div>
         </div>
 
         <div class="ai-summary-box">
-          <h3>🤖 AI Election Summary</h3>
+          <h3>🤖 AI Election Summary <span class="gemini-badge">✨ Powered by Gemini 2.0 Flash</span></h3>
           <div class="ai-summary-content" id="ai-summary" aria-live="polite">
             Click the button below to generate an AI-powered summary of the current election status using Google Gemini.
           </div>
@@ -1638,9 +1657,9 @@
 
       <!-- TAB 2: TIMELINE -->
       <section class="tab-panel" id="panel-timeline" role="tabpanel" aria-labelledby="tab-timeline">
-        <h2 style="font-size:24px;margin-bottom:8px;">Election Timeline 2026</h2>
-        <p style="color:var(--text-secondary);font-size:14px;margin-bottom:24px;">Track every phase of the election
-          process from registration to results declaration.</p>
+        <h2 style="font-size:24px;margin-bottom:8px;">Indian Election Timeline 2029</h2>
+        <p style="color:var(--text-secondary);font-size:14px;margin-bottom:24px;">Track every phase of the Lok Sabha election
+          process from announcement to results declaration.</p>
 
         <div class="chart-wrapper">
           <div id="timeline-chart" class="chart-container" style="min-height:200px;"
@@ -1676,20 +1695,30 @@
         <div class="maps-section">
           <h3>📍 Find Your Nearest Polling Station</h3>
           <div class="maps-wrapper">
-            <iframe id="google-maps-iframe"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.215!2d-73.9857!3d40.7484!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
-              width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade" title="Google Maps showing nearest polling station location"
-              aria-label="Google Maps embed showing nearest polling station">
+            <iframe
+              id="google-maps-iframe"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.9763636767895!2d77.20659231455!3d28.617448982418!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd37a741a001%3A0x7c1e7a9e4bfb3b25!2sElection%20Commission%20of%20India!5e0!3m2!1sen!2sin!4v1234567890"
+              width="100%"
+              height="280"
+              style="border:0;border-radius:12px;margin-top:1rem"
+              allowfullscreen=""
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Election Commission of India, New Delhi"
+              aria-label="Map showing Election Commission of India headquarters in New Delhi">
             </iframe>
             <div class="maps-info">
-              <h4>📍 Community Center Polling Station</h4>
-              <p>350 Fifth Avenue, New York, NY 10118 · Open 6 AM – 9 PM on Voting Day</p>
-              <a href="https://www.google.com/maps/dir/?api=1&destination=350+Fifth+Avenue+New+York+NY+10118"
-                target="_blank" rel="noopener noreferrer" class="btn-secondary"
-                aria-label="Get directions to polling station on Google Maps">
-                🧭 Get Directions
-              </a>
+              <h4>📍 Election Commission of India — New Delhi</h4>
+              <p>Headquarters of India's Election Commission · Zoom and pan to explore</p>
+              <div style="margin-top:0.75rem">
+                <a href="https://maps.google.com/?q=Election+Commission+of+India+New+Delhi"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   aria-label="Open Election Commission of India in Google Maps">
+                  🧭 Get Directions via Google Maps
+                </a>
+              </div>
+              <span class="gemini-badge" style="margin-top:0.5rem;display:inline-flex;">✨ Powered by Gemini 2.0 Flash</span>
             </div>
           </div>
         </div>
@@ -1714,7 +1743,7 @@
         </div>
 
         <div class="rights-ai-box">
-          <h3>🤖 Ask About Your Rights</h3>
+          <h3>🤖 Ask About Your Rights <span class="gemini-badge">✨ Powered by Gemini 2.0 Flash</span></h3>
           <p style="color:var(--text-secondary);font-size:14px;margin-bottom:12px;">Have a specific question about voter
             rights? Ask our AI advisor.</p>
           <div class="mini-chat-input">
@@ -1731,7 +1760,7 @@
       <section class="tab-panel" id="panel-assistant" role="tabpanel" aria-labelledby="tab-assistant">
         <div class="chat-container">
           <div class="chat-header">
-            <h2>🤖 AI Election Assistant</h2>
+            <h2>🤖 AI Election Assistant <span class="gemini-badge">✨ Powered by Gemini 2.0 Flash</span></h2>
             <p>Powered by Google Gemini 2.0 Flash — Ask anything about the election process</p>
             <div class="quick-prompts">
               <button class="quick-prompt-btn" onclick="sendQuickPrompt('How do I register to vote?')"
@@ -1856,36 +1885,44 @@
     const GEMINI_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
 
     /** @type {string} System prompt providing full election context to Gemini */
-    const SYSTEM_PROMPT = `You are VoteWise, an expert AI election assistant. You provide accurate, non-partisan information about the U.S. election process for the 2026 election cycle.
+    const SYSTEM_PROMPT = `You are VoteWise, an expert AI election assistant. You provide accurate, non-partisan information about the Indian election process — specifically the Lok Sabha (General Elections) cycle.
 
 Key Election Context:
-- Election Year: 2026 (Midterm Elections)
-- Voting Day: November 3, 2026
-- Registration Deadline: Varies by state, typically 15-30 days before Election Day
-- Early Voting: Available in most states starting mid-October 2026
+- Election Body: Election Commission of India (ECI) — eci.gov.in
+- Election Type: Lok Sabha (General Elections) — held every 5 years
+- Next Lok Sabha Election: 2029
+- Voter Registration: nvsp.in or through Booth Level Officers (BLO)
+- Voter ID (EPIC): Free Electoral Photo Identity Card — apply at nvsp.in
+- Booth Search: electoralsearch.eci.gov.in
+- Voter Helpline: 1950
+- Violation Reporting: cVIGIL app or eci.gov.in
 
-Election Phases:
-1. Voter Registration Period (Jan 1 – Mar 31, 2026)
-2. Candidate Nomination (Apr 1 – Jun 30, 2026) — CURRENT PHASE
-3. Campaign Period (Jul 1 – Nov 2, 2026)
-4. Voting Day (Nov 3, 2026)
-5. Vote Counting (Nov 3 – Nov 17, 2026)
-6. Results Declaration (Nov 18 – Dec 15, 2026)
+Election Phases (Lok Sabha 2029):
+1. Announcement & Model Code of Conduct (Jan 15 – Feb 28, 2029)
+2. Voter List Revision & EPIC Card (Feb 1 – Mar 15, 2029)
+3. Nomination & Scrutiny (Mar 1 – Mar 31, 2029)
+4. Campaign Period (Apr 1 – May 10, 2029)
+5. Polling Day — Multi-Phase (May 12 – May 25, 2029)
+6. Counting & Results Declaration (Jun 1 – Jun 4, 2029)
 
-Voter Rights (Federal):
-- Right to vote without intimidation
-- Right to assistance if needed
-- Right to a secret ballot
-- Right to a provisional ballot
-- Right to accessible polling stations
-- Right to report violations
+Voter Rights (India):
+- Right to vote (Article 326, Constitution of India)
+- Right to secret ballot (EVM ensures privacy)
+- Right to NOTA (None of the Above) since 2013
+- Right to accessible voting (PwD — ECI Accessible Elections)
+- Right to paid holiday on voting day (Section 135B, RPA 1951)
+- Right to report violations (cVIGIL app, Voter Helpline 1950)
+
+Voting Technology:
+- EVM: Electronic Voting Machine — tamper-proof, battery operated, no internet
+- VVPAT: Voter Verifiable Paper Audit Trail — confirms vote for 7 seconds
+- NOTA: Press to vote for None of the Above
 
 Rules:
 - Be concise but thorough
 - Always be non-partisan
 - Provide actionable guidance
-- If unsure, recommend official election resources
-- Format dates clearly
+- Recommend official ECI resources (eci.gov.in, nvsp.in, electoralsearch.eci.gov.in)
 - Keep responses under 250 words`;
 
     /**
@@ -1894,52 +1931,52 @@ Rules:
      */
     const ELECTION_PHASES = [
       {
-        id: 'registration',
-        icon: '📝',
-        name: 'Voter Registration Period',
-        start: new Date('2026-01-01'),
-        end: new Date('2026-03-31'),
-        description: 'During this phase, eligible citizens can register to vote. You must be at least 18 years old by Election Day, a U.S. citizen, and a resident of your state. Registration can be done online, by mail, or in person at your local election office. Check your state\'s specific deadlines as some allow same-day registration.'
-      },
-      {
-        id: 'nomination',
-        icon: '🎤',
-        name: 'Candidate Nomination',
-        start: new Date('2026-04-01'),
-        end: new Date('2026-06-30'),
-        description: 'Candidates officially file to run for office and are nominated by their parties. Primary elections and caucuses determine party nominees. This is when candidate platforms are solidified and ballot positions are determined. Party conventions may also occur during this phase.'
-      },
-      {
-        id: 'campaign',
+        id: 1,
         icon: '📢',
+        name: 'Announcement & Model Code of Conduct',
+        start: new Date('2029-01-15'),
+        end: new Date('2029-02-28'),
+        description: 'Election Commission of India announces election schedule. Model Code of Conduct activated immediately restricting ruling party announcements and policy decisions that could influence voters.'
+      },
+      {
+        id: 2,
+        icon: '📋',
+        name: 'Voter List Revision & EPIC Card',
+        start: new Date('2029-02-01'),
+        end: new Date('2029-03-15'),
+        description: 'Final electoral rolls published. Citizens can apply for new EPIC cards at nvsp.in or through Booth Level Officers. Check your name at electoralsearch.eci.gov.in.'
+      },
+      {
+        id: 3,
+        icon: '📝',
+        name: 'Nomination & Scrutiny',
+        start: new Date('2029-03-01'),
+        end: new Date('2029-03-31'),
+        description: 'Candidates file nomination papers at Returning Officer offices. Returning officers scrutinize nominations for eligibility. Candidates may withdraw within 2 days of scrutiny deadline.'
+      },
+      {
+        id: 4,
+        icon: '📣',
         name: 'Campaign Period',
-        start: new Date('2026-07-01'),
-        end: new Date('2026-11-02'),
-        description: 'Candidates actively campaign, participate in debates, and present their platforms to voters. This period includes town halls, rallies, media appearances, and voter outreach. Campaign finance disclosures are filed and made public. Voters should research candidates and their positions during this time.'
+        start: new Date('2029-04-01'),
+        end: new Date('2029-05-10'),
+        description: 'Political parties and candidates campaign across constituencies. Campaign ends 48 hours before polling (Silent Period enforced by ECI). All campaign expenditure limits apply per ECI guidelines.'
       },
       {
-        id: 'voting',
+        id: 5,
         icon: '🗳️',
-        name: 'Voting Day',
-        start: new Date('2026-11-03'),
-        end: new Date('2026-11-03'),
-        description: 'Election Day — polls are open for all registered voters from early morning (typically 6-7 AM) to evening (7-8 PM), with exact hours varying by state. Voters cast their ballots at designated polling stations. Bring a valid photo ID where required. If you encounter issues, you have the right to cast a provisional ballot.'
+        name: 'Polling Day (Multi-Phase)',
+        start: new Date('2029-05-12'),
+        end: new Date('2029-05-25'),
+        description: 'Voting conducted in multiple phases across India using Electronic Voting Machines (EVMs). VVPAT slips provide paper audit trail. Polls open 7 AM – 6 PM. Carry EPIC or approved alternate ID.'
       },
       {
-        id: 'counting',
+        id: 6,
         icon: '📊',
-        name: 'Vote Counting',
-        start: new Date('2026-11-03'),
-        end: new Date('2026-11-17'),
-        description: 'After polls close, election officials count all ballots including mail-in, absentee, and provisional ballots. Vote counting must follow strict chain-of-custody procedures. Bipartisan observers may watch the counting process. Unofficial results are typically available on election night, but final counts may take days or weeks for close races.'
-      },
-      {
-        id: 'results',
-        icon: '🏆',
-        name: 'Results Declaration',
-        start: new Date('2026-11-18'),
-        end: new Date('2026-12-15'),
-        description: 'Official election results are certified by state and local election authorities. Recount procedures are triggered if margins are within specified thresholds. Winners are officially declared, and transition processes begin for newly elected officials. All results are made part of the public record.'
+        name: 'Counting & Results Declaration',
+        start: new Date('2029-06-01'),
+        end: new Date('2029-06-04'),
+        description: 'EVM results counted at designated centers under ECI observer supervision. Results published at results.eci.gov.in on counting day. Winning candidates take oath within weeks of certification.'
       }
     ];
 
@@ -1953,114 +1990,114 @@ Rules:
         icon: '✅',
         content: `<p>Before registering, confirm you meet all eligibility requirements:</p>
           <ul>
-            <li>You must be a <strong>U.S. citizen</strong></li>
-            <li>You must be <strong>at least 18 years old</strong> on or before Election Day</li>
-            <li>You must be a <strong>resident of the state</strong> where you plan to vote</li>
-            <li>You must meet your state's <strong>residency requirements</strong></li>
-            <li>You must <strong>not be currently serving a felony sentence</strong> (varies by state)</li>
+            <li>You must be an <strong>Indian citizen</strong></li>
+            <li>You must be <strong>at least 18 years old</strong> as of January 1 of the election year</li>
+            <li>You must be a <strong>resident of the constituency</strong> where you plan to vote</li>
+            <li>You must <strong>not be declared of unsound mind</strong> by a competent court</li>
+            <li>You must <strong>not be disqualified</strong> under any law relating to corrupt practices</li>
           </ul>
-          <p>Visit <strong>vote.gov</strong> to check your specific state's requirements.</p>`
+          <p>Check your name at <strong>electoralsearch.eci.gov.in</strong> using your name, EPIC number, or registered mobile number.</p>`
       },
       {
-        title: 'Register to Vote',
-        icon: '📝',
-        content: `<p>Register through one of these convenient methods:</p>
+        title: 'Get Your EPIC Card (Voter ID)',
+        icon: '🪪',
+        content: `<p>Apply for your Electoral Photo Identity Card (EPIC) — it is free of charge:</p>
           <ul>
-            <li><strong>Online:</strong> Visit your state's election website or vote.gov</li>
-            <li><strong>By Mail:</strong> Download and mail the National Voter Registration Form</li>
-            <li><strong>In Person:</strong> Visit your local election office, DMV, or public library</li>
-            <li><strong>Deadline:</strong> Register at least 15-30 days before Election Day (varies by state)</li>
+            <li><strong>Online:</strong> Visit <strong>nvsp.in</strong> and fill Form 6 for new registration</li>
+            <li><strong>In Person:</strong> Contact your Booth Level Officer (BLO) or ERO office</li>
+            <li><strong>Via App:</strong> Use the Voter Helpline App or National Voter Service Portal</li>
+            <li><strong>Timeline:</strong> EPIC card issued within 4-6 weeks of application</li>
           </ul>
-          <p>You'll need your <strong>full legal name, address, date of birth,</strong> and <strong>state ID or last 4 digits of SSN</strong>. You'll receive a voter registration card confirming your registration.</p>`
+          <p>You will need your <strong>Aadhaar, passport photo, address proof, and age proof</strong>. Your name will appear on the electoral roll for your constituency.</p>`
       },
       {
-        title: 'Find Your Polling Station',
+        title: 'Find Your Polling Booth',
         icon: '📍',
-        content: `<p>Locate your assigned polling station before Election Day:</p>
+        content: `<p>Locate your assigned polling booth before voting day:</p>
           <ul>
-            <li>Check your <strong>voter registration card</strong> — it lists your polling location</li>
-            <li>Use your state or county election website's <strong>polling place locator</strong></li>
-            <li>Call your <strong>local election office</strong> for assistance</li>
-            <li>Check <strong>Google Maps</strong> for polling locations near you</li>
+            <li>Check your <strong>EPIC card</strong> — it lists your booth number and address</li>
+            <li>Search at <strong>electoralsearch.eci.gov.in</strong> using your EPIC number or name</li>
+            <li>Call <strong>Voter Helpline 1950</strong> for assistance finding your booth</li>
+            <li>Download the <strong>Voter Helpline App</strong> for easy booth lookup</li>
           </ul>
-          <p>Note: Your polling station is based on your <strong>registered address</strong>. If you've moved, update your registration. Check hours of operation — most polls open at <strong>6-7 AM</strong> and close at <strong>7-8 PM</strong>.</p>`
+          <p>Note: Your polling booth is based on your <strong>registered address</strong>. Booths open at <strong>7:00 AM</strong> and close at <strong>6:00 PM</strong> on voting day.</p>`
       },
       {
-        title: 'Understand Your Ballot',
-        icon: '📄',
-        content: `<p>Familiarize yourself with what you'll be voting on:</p>
+        title: 'Carry Valid ID to Polling Booth',
+        icon: '🪪',
+        content: `<p>Carry your EPIC card on voting day. If unavailable, ECI accepts 12 alternatives:</p>
           <ul>
-            <li>Research <strong>candidates and their platforms</strong> for each race</li>
-            <li>Review any <strong>ballot measures or propositions</strong></li>
-            <li>Check your <strong>sample ballot</strong> online before heading to the polls</li>
-            <li>Understand the <strong>different sections</strong>: federal, state, and local races</li>
-            <li>You can bring <strong>notes or a prepared list</strong> to the polling station</li>
+            <li><strong>Aadhaar Card</strong> issued by UIDAI</li>
+            <li><strong>Passport, Driving License, or PAN Card</strong></li>
+            <li><strong>MNREGA Job Card</strong> or <strong>Bank/Post Office Passbook with photo</strong></li>
+            <li><strong>Service ID cards</strong> issued by Central/State Government or PSUs</li>
+            <li><strong>Health Insurance Smart Card</strong> issued under Ministry of Labour</li>
           </ul>
-          <p>Many states offer <strong>sample ballots</strong> on their election websites weeks before the election. Take time to research each contest.</p>`
+          <p>All 12 alternative IDs are officially recognised by <strong>Election Commission of India</strong> as valid voter identification documents.</p>`
       },
       {
-        title: 'Cast Your Vote',
+        title: 'Cast Your Vote Using EVM',
         icon: '🗳️',
-        content: `<p>On Election Day, follow these steps at your polling station:</p>
+        content: `<p>On polling day, follow these steps at your polling booth:</p>
           <ul>
-            <li><strong>Arrive at your polling station</strong> during operating hours</li>
-            <li><strong>Check in</strong> with poll workers and show required ID</li>
-            <li><strong>Receive your ballot</strong> (paper or electronic)</li>
-            <li><strong>Mark your choices</strong> carefully — follow all instructions</li>
-            <li><strong>Review your ballot</strong> before submitting</li>
-            <li><strong>Submit your ballot</strong> — feed paper ballot into scanner or confirm electronic submission</li>
-            <li><strong>Get your "I Voted" sticker!</strong></li>
+            <li><strong>Arrive at your polling booth</strong> with your EPIC or approved alternate ID</li>
+            <li><strong>Check in</strong> with polling officers — they will verify your name in the register</li>
+            <li><strong>Receive your ballot slip</strong> and enter the voting compartment</li>
+            <li><strong>Press the blue button</strong> next to your chosen candidate on the EVM</li>
+            <li>A <strong>green light and beep</strong> confirms your vote has been recorded</li>
+            <li>Press <strong>NOTA</strong> (None of the Above) if you do not wish to vote for any candidate</li>
           </ul>
-          <p>If you make a mistake, <strong>ask for a new ballot</strong> — do not cross out or alter your choices.</p>`
+          <p>The EVM is <strong>tamper-proof, battery operated</strong>, and does not connect to any network.</p>`
       },
       {
-        title: 'Verify Your Vote Was Counted',
-        icon: '🔍',
-        content: `<p>After voting, you can confirm your ballot was received and counted:</p>
+        title: 'Verify via VVPAT Slip',
+        icon: '🧾',
+        content: `<p>After pressing the EVM button, the VVPAT machine provides confirmation:</p>
           <ul>
-            <li>Use your state's <strong>ballot tracking tool</strong> (for mail-in/absentee ballots)</li>
-            <li>Check your <strong>state election website</strong> for confirmation</li>
-            <li>Contact your <strong>local election office</strong> if you have concerns</li>
-            <li>For provisional ballots, follow up within <strong>7-10 days</strong></li>
+            <li>A printed slip appears in the <strong>VVPAT glass window</strong> for 7 seconds</li>
+            <li>The slip shows your chosen <strong>candidate name, party symbol, and serial number</strong></li>
+            <li>The slip <strong>automatically drops</strong> into a sealed VVPAT box — you cannot take it</li>
+            <li>VVPAT slips are used for <strong>audit and verification</strong> if results are disputed</li>
           </ul>
-          <p>If you believe your vote was not properly counted, you have the right to <strong>file a complaint</strong> with your state election board or the Election Assistance Commission.</p>`
+          <p>If the VVPAT slip does not match your choice, <strong>immediately inform the Presiding Officer</strong>. You are entitled to a Tender Vote if a discrepancy is found.</p>`
       }
     ];
 
     /**
      * Voter rights data for the accordion
+
      * @type {Array<{icon: string, title: string, description: string}>}
      */
     const VOTER_RIGHTS = [
       {
-        icon: '🛡️',
-        title: 'Right to Vote Without Intimidation',
-        description: 'Federal law protects your right to vote free from threats, coercion, or intimidation. No one — including employers, union officials, or political party representatives — may threaten you for how you vote or whether you vote. The Voting Rights Act of 1965 and the Intimidation of Voters Act (18 U.S.C. § 594) make voter intimidation a federal crime. If you experience intimidation, report it immediately to poll workers and the Department of Justice Voting Section at 800-253-3931.'
+        icon: '🗳️',
+        title: 'Right to Vote (Article 326)',
+        description: 'Every Indian citizen aged 18 or above has the constitutional right to vote in elections. This right is guaranteed under Article 326 of the Constitution of India and cannot be denied on grounds of religion, race, caste, sex, or place of birth.'
       },
       {
-        icon: '🤝',
-        title: 'Right to Assistance If Needed',
-        description: 'If you need help to vote due to blindness, disability, or inability to read or write, you have the right to bring an assistant of your choice into the voting booth. Your assistant can be anyone except your employer, your employer\'s agent, or an officer or agent of your union. Poll workers are also trained to provide assistance. This right is guaranteed under Section 208 of the Voting Rights Act.'
+        icon: '🤫',
+        title: 'Right to Secret Ballot',
+        description: 'Your vote is completely private. No person — including family, employer, or poll workers — has the right to demand to know how you voted. Electronic Voting Machines (EVMs) ensure complete ballot secrecy. Disclosing how you voted is entirely your personal choice.'
       },
       {
-        icon: '🔒',
-        title: 'Right to a Secret Ballot',
-        description: 'Your vote is completely private. No one — including poll workers, candidates, family members, or government officials — has the right to see how you voted. Voting booths are designed to ensure privacy. Taking photos of your completed ballot is restricted in many states. Your employer cannot require you to disclose your vote. This fundamental right is the cornerstone of democratic elections.'
-      },
-      {
-        icon: '📋',
-        title: 'Right to a Provisional Ballot',
-        description: 'If your eligibility is questioned at the polling place, you have the right to cast a provisional ballot under the Help America Vote Act (HAVA) of 2002. Your provisional ballot will be counted once your eligibility is verified. You have the right to receive written information about how to verify whether your provisional ballot was counted, and if it was not, the reason why. Always insist on your right to a provisional ballot if turned away.'
+        icon: '❌',
+        title: 'Right to NOTA (None of the Above)',
+        description: 'Introduced by Supreme Court order in 2013. If you do not wish to vote for any candidate, you can press the NOTA button on the EVM. Your vote is counted and recorded but does not benefit any candidate. NOTA strengthens democratic accountability.'
       },
       {
         icon: '♿',
-        title: 'Right to Accessible Polling Stations',
-        description: 'Under the Americans with Disabilities Act (ADA) and the Help America Vote Act, all polling places must be physically accessible to voters with disabilities. This includes wheelchair ramps, accessible voting machines with audio capabilities, large-print ballots, and adequate lighting. If your polling place is not accessible, contact your local election office — they must provide an alternative accessible location or curbside voting.'
+        title: 'Right to Accessible Voting (PwD)',
+        description: 'Persons with disabilities have the right to accessible polling booths with wheelchair ramps, Braille EVMs, VVPAT accessibility features, and companion assistance. ECI\'s Accessible Elections initiative ensures PwD voters can exercise their right. Contact ECI helpline 1950 for special arrangements.'
       },
       {
-        icon: '📣',
+        icon: '🏖️',
+        title: 'Right to Paid Holiday on Voting Day',
+        description: 'Under Section 135B of the Representation of the People Act 1951, every employee is entitled to a paid holiday on the day of polling in their constituency. Employers cannot deny this right. Violation is punishable under the Act.'
+      },
+      {
+        icon: '📞',
         title: 'Right to Report Violations',
-        description: 'You have the right to report any election law violations or voting problems. Contact your state election office, the Election Protection Hotline at 866-OUR-VOTE (866-687-8683), or the Department of Justice Voting Rights Section. You can report problems such as long wait times, equipment malfunctions, voter intimidation, accessibility issues, or poll worker misconduct. Your complaint will be investigated and addressed. You are protected from retaliation for filing a complaint.'
+        description: 'You have the right to report election violations to ECI via Voter Helpline 1950, the cVIGIL mobile app, or eci.gov.in. You can report booth capturing, voter intimidation, Model Code of Conduct breaches, and distribution of money or gifts. You are protected from retaliation for filing complaints.'
       }
     ];
 
@@ -2069,23 +2106,23 @@ Rules:
      * @type {Array<{question: string, answer: string, category: string}>}
      */
     const FAQ_DATA = [
-      { question: 'Who is eligible to vote in the United States?', answer: 'To vote in U.S. elections, you must be a U.S. citizen, at least 18 years old on or before Election Day, and a resident of the state where you plan to vote. Some states have additional residency requirements. Most states also require that you are not currently serving a felony sentence, though restoration of voting rights varies by state.', category: 'Registration' },
-      { question: 'How do I register to vote?', answer: 'You can register to vote online at vote.gov, by mail using the National Voter Registration Form, or in person at your local election office, DMV, or public library. You will need your full legal name, address, date of birth, and either your state-issued ID number or the last four digits of your Social Security number.', category: 'Registration' },
-      { question: 'When is the registration deadline?', answer: 'Registration deadlines vary by state, typically ranging from 15 to 30 days before Election Day. Some states offer same-day registration, allowing you to register and vote on Election Day. Check your state\'s specific deadline at vote.gov or your state election website.', category: 'Registration' },
-      { question: 'Can I change my voter registration?', answer: 'Yes, you can update your voter registration if you\'ve changed your name, address, or party affiliation. You can make changes online through your state\'s election website, by re-submitting a voter registration form, or by contacting your local election office. Update well before any registration deadlines.', category: 'Registration' },
-      { question: 'What ID do I need to vote?', answer: 'ID requirements vary by state. Some states require a photo ID such as a driver\'s license, state ID, or passport. Other states accept non-photo IDs like utility bills, bank statements, or government documents with your name and address. A few states require no ID at all. Check your state\'s requirements before Election Day.', category: 'Voting' },
-      { question: 'Can I vote early or by mail?', answer: 'Most states offer early voting, typically beginning 10-45 days before Election Day. Many states also offer mail-in or absentee voting. Some states conduct elections entirely by mail. Check your state\'s options at vote.gov. Request your mail-in ballot well in advance and follow all instructions carefully for it to be counted.', category: 'Voting' },
-      { question: 'What happens if I make a mistake on my ballot?', answer: 'If you make a mistake on a paper ballot before submitting it, tell a poll worker immediately. You can usually receive a new ballot (most states allow up to three spoiled ballots). For electronic voting machines, use the review screen to check your choices before final submission. Never try to alter a submitted ballot.', category: 'Voting' },
-      { question: 'How long will I wait to vote?', answer: 'Wait times vary depending on location, time of day, and election type. Generally, early morning and after 5 PM are busiest. To minimize wait time, consider voting during mid-morning or early afternoon. Early voting periods typically have shorter lines. Some states post estimated wait times online.', category: 'Voting' },
-      { question: 'What is a provisional ballot?', answer: 'A provisional ballot is a backup ballot you can cast if there\'s an issue with your eligibility at the polls — such as your name not appearing on the voter rolls. After you vote provisionally, election officials verify your eligibility. If confirmed, your ballot is counted like any other. You can check whether your provisional ballot was counted.', category: 'Voting' },
-      { question: 'What are my rights as a voter?', answer: 'You have the right to vote without intimidation, to receive assistance if needed, to a secret ballot, to cast a provisional ballot if your eligibility is questioned, to accessible polling stations, and to report any violations. Federal laws including the Voting Rights Act protect these rights.', category: 'Rights' },
-      { question: 'Can my employer prevent me from voting?', answer: 'No. Most states have laws requiring employers to provide time off for voting. Your employer cannot threaten, coerce, or fire you for voting or for how you vote. If you need time off to vote, notify your employer in advance. Check your state\'s specific time-off-to-vote laws.', category: 'Rights' },
-      { question: 'What should I do if I face voter intimidation?', answer: 'If you experience or witness voter intimidation, report it immediately to poll workers, your local election office, the Election Protection Hotline (866-OUR-VOTE), or the Department of Justice Voting Section. Document what happened, including time, location, and descriptions of those involved. You are protected by federal law from retaliation.', category: 'Rights' },
-      { question: 'How are votes counted?', answer: 'After polls close, election officials count all ballots — in-person, mail-in, absentee, and provisional. Paper ballots are typically scanned by machines and verified. Electronic votes are tallied digitally with audit trails. Bipartisan teams of observers may watch the process. Results are certified by county and state election boards.', category: 'Results' },
-      { question: 'When will election results be announced?', answer: 'Unofficial results are typically reported on election night as votes are counted. However, official results may take days or weeks, especially if there are many mail-in ballots or close races requiring recounts. States must certify results within a set timeframe, usually 2-6 weeks after Election Day.', category: 'Results' },
-      { question: 'What happens if there is a tie or recount?', answer: 'If the margin of victory falls within a state\'s threshold (often 0.5% or less), an automatic recount may be triggered. Candidates may also request recounts in close races. Recounting procedures vary by state and may include hand recounts. In rare cases of a tie, the outcome may be decided by a coin toss, drawing of lots, or special election.', category: 'Results' },
-      { question: 'Can I track my mail-in ballot?', answer: 'Yes, most states offer ballot tracking tools on their election websites. After submitting your mail-in or absentee ballot, you can track its status — from received by the election office, to accepted and counted. If there\'s an issue with your ballot (like a missing signature), you\'ll typically be notified and given a chance to fix it.', category: 'Voting' },
-      { question: 'What is the difference between primary and general elections?', answer: 'Primary elections determine each party\'s nominees for the general election. They can be open (any voter can participate), closed (only party members can vote), or semi-open. The general election is when all voters choose between the party nominees and independents for each office. Primaries typically occur months before the general election.', category: 'Voting' }
+      { question: 'What is the minimum age to vote in India?', answer: '18 years as of January 1 of the election year. Check your eligibility and voter registration status at electoralsearch.eci.gov.in or call Voter Helpline 1950.', category: 'Registration' },
+      { question: 'How do I register as a voter in India?', answer: 'Visit nvsp.in or your nearest Booth Level Officer (BLO) office. Fill Form 6 for new registration online or offline. The process takes 4-6 weeks and your EPIC card will be delivered to your address.', category: 'Registration' },
+      { question: 'What is an EPIC card?', answer: 'Electoral Photo Identity Card (EPIC) is your official voter ID issued free of charge by the Election Commission of India. It contains your photo, name, address, EPIC number, and constituency details.', category: 'Registration' },
+      { question: 'How do I find my polling booth?', answer: 'Search at electoralsearch.eci.gov.in using your name, EPIC number, or registered mobile number. The Voter Helpline App also lets you find your booth, check your name on the voter list, and view your EPIC details.', category: 'Registration' },
+      { question: 'What if I lost my EPIC card?', answer: 'Apply for a duplicate EPIC card at nvsp.in using Form 002. On voting day, you can use any of 12 ECI-approved alternative IDs including Aadhaar, Passport, Driving License, or PAN Card.', category: 'Registration' },
+      { question: 'What is an EVM?', answer: 'Electronic Voting Machine used in all Indian elections since 2004. It is tamper-proof, battery operated, and does not connect to the internet or any network. Each EVM can record up to 2,000 votes.', category: 'Voting' },
+      { question: 'What is VVPAT?', answer: 'Voter Verifiable Paper Audit Trail prints a paper slip after you vote showing your chosen candidate name, party symbol, and serial number. The slip is visible through a glass window for 7 seconds, then drops into a sealed box for audit purposes.', category: 'Voting' },
+      { question: 'What is NOTA?', answer: 'None of the Above is an option on every EVM in India since the Supreme Court introduced it in 2013. Press NOTA if you do not want to vote for any candidate. Your vote is counted as NOTA but does not benefit any candidate.', category: 'Voting' },
+      { question: 'What IDs are accepted if I do not have EPIC?', answer: 'ECI accepts 12 alternative photo IDs: Aadhaar, Passport, Driving License, PAN Card, MNREGA Job Card, Bank or Post Office Passbook with photo, Service ID cards from Central/State Government, Smart Card from Ministry of Labour, and 4 other approved documents.', category: 'Voting' },
+      { question: 'What time do polling booths open?', answer: 'Polling booths open at 7:00 AM and close at 6:00 PM on voting day. Voters who are in the queue by 6:00 PM are allowed to cast their votes. Arrive early to avoid long queues, especially on the first day of multi-phase elections.', category: 'Voting' },
+      { question: 'Can I vote if my name is not on the voter list?', answer: 'No. Your name must be on the electoral roll for your constituency. Apply to add your name at nvsp.in at least 2 weeks before the election. Check your name at electoralsearch.eci.gov.in before voting day.', category: 'Voting' },
+      { question: 'What is the Model Code of Conduct?', answer: 'ECI guidelines activated from the day the election schedule is announced. It restricts the ruling party from making policy announcements, transfers of officials, and activities that could influence voters. Violations can be reported via cVIGIL app.', category: 'Voting' },
+      { question: 'What is my right to a secret ballot?', answer: 'Your vote is completely private. No one can legally demand to know how you voted. EVM technology ensures complete ballot secrecy. Even poll workers cannot determine how any individual voted.', category: 'Rights' },
+      { question: 'Can my employer stop me from voting?', answer: 'No. Under Section 135B of the Representation of the People Act 1951, all employees are entitled to a paid holiday on election day to vote. Employers who deny this right can face legal action.', category: 'Rights' },
+      { question: 'How do I report election violations?', answer: 'Call Voter Helpline 1950, use the cVIGIL app to report with photo or video evidence, or visit eci.gov.in. You can report booth capturing, voter intimidation, distribution of money or gifts, and Model Code of Conduct violations. All complaints are investigated by ECI.', category: 'Rights' },
+      { question: 'How are votes counted in India?', answer: 'EVMs are transported to designated counting centers under strict security and observer supervision after polling ends. Results are counted round by round for each constituency. Official results are published at results.eci.gov.in on counting day.', category: 'Results' },
+      { question: 'Where can I check election results?', answer: 'Official results are published at results.eci.gov.in. ECI also updates results on the Voter Helpline App and Twitter. All major news channels provide live result coverage on counting day with constituency-wise data.', category: 'Results' }
     ];
 
     /** @type {Set<number>} Track completed steps */
@@ -2119,7 +2156,7 @@ Rules:
         targetPanel.classList.add('active');
       }
 
-      // Redraw charts when their tab becomes active
+      // Redraw charts when their tab becomes active (lazy loading)
       if (tabId === 'timeline' && chartsLoaded) {
         drawTimelineChart();
       }
@@ -2268,24 +2305,30 @@ Rules:
     const getSmartFallback = (message) => {
       const lower = message.toLowerCase();
       if (lower.includes('register')) {
-        return 'To register to vote: 1) Check eligibility (18+, U.S. citizen, state resident) 2) Visit vote.gov or your state election website 3) Provide your name, address, DOB, and ID 4) Submit at least 15-30 days before Election Day. Many states also offer same-day registration.\n\n[Offline response — connect your API key for live AI answers]';
+        return 'To register as a voter in India: 1) Visit nvsp.in or contact your nearest Booth Level Officer (BLO) 2) Fill Form 6 for new registration 3) You need to be 18+ as of January 1 of the election year and an Indian citizen 4) Your EPIC card will be issued within 4-6 weeks. Voter Helpline: 1950.\n\n[Offline response — connect your API key for live AI answers]';
       }
-      if (lower.includes('voting day') || lower.includes('when') || lower.includes('election day')) {
-        return 'The 2026 Midterm Election Day is November 3, 2026. Polls typically open between 6-7 AM and close between 7-8 PM, depending on your state. Early voting begins in most states in mid-October 2026.\n\n[Offline response — connect your API key for live AI answers]';
+      if (lower.includes('polling day') || lower.includes('voting day') || lower.includes('when') || lower.includes('election day')) {
+        return 'The next Lok Sabha election is expected in 2029. Polling is conducted in multiple phases across India. Polling booths open at 7:00 AM and close at 6:00 PM on each polling day. Check eci.gov.in for official schedule announcements.\n\n[Offline response — connect your API key for live AI answers]';
       }
-      if (lower.includes('id') || lower.includes('identification')) {
-        return 'ID requirements vary by state. Common accepted IDs include: driver\'s license, state ID, passport, or military ID. Some states also accept utility bills, bank statements, or government documents. Check your state\'s specific requirements at vote.gov.\n\n[Offline response — connect your API key for live AI answers]';
+      if (lower.includes('id') || lower.includes('epic') || lower.includes('identification')) {
+        return 'Your EPIC card (Electoral Photo Identity Card) is your main voter ID — apply free at nvsp.in. If unavailable, ECI accepts 12 alternatives including Aadhaar, Passport, Driving License, PAN Card, MNREGA Job Card, and Bank Passbook with photo.\n\n[Offline response — connect your API key for live AI answers]';
       }
-      if (lower.includes('count') || lower.includes('counted')) {
-        return 'Votes are counted by election officials after polls close. Paper ballots are scanned by machines, electronic votes are tallied digitally, and mail-in ballots are verified and counted. Bipartisan observers oversee the process. Results are certified by state election boards within 2-6 weeks.\n\n[Offline response — connect your API key for live AI answers]';
+      if (lower.includes('evm') || lower.includes('machine') || lower.includes('electronic')) {
+        return 'EVMs (Electronic Voting Machines) are used in all Indian elections since 2004. Press the blue button next to your candidate on the EVM. VVPAT machine shows a paper slip for 7 seconds confirming your vote. EVMs are tamper-proof and battery operated with no internet connection.\n\n[Offline response — connect your API key for live AI answers]';
       }
-      if (lower.includes('mistake') || lower.includes('error') || lower.includes('wrong')) {
-        return 'If you make a mistake on your ballot before submitting: ask a poll worker for a new ballot (most states allow up to 3). For electronic voting, use the review screen. Never submit an altered ballot. If you realize an error after submission, contact your election office.\n\n[Offline response — connect your API key for live AI answers]';
+      if (lower.includes('nota')) {
+        return 'NOTA (None of the Above) is available on every EVM in India since the Supreme Court introduced it in 2013. Press the NOTA button if you do not wish to vote for any candidate. Your vote is counted as NOTA but does not benefit any candidate.\n\n[Offline response — connect your API key for live AI answers]';
+      }
+      if (lower.includes('booth') || lower.includes('polling')) {
+        return 'Find your polling booth at electoralsearch.eci.gov.in using your EPIC number, name, or registered mobile number. You can also use the Voter Helpline App or call 1950. Polling booths are open from 7 AM to 6 PM on voting day.\n\n[Offline response — connect your API key for live AI answers]';
+      }
+      if (lower.includes('count') || lower.includes('result')) {
+        return 'Votes are counted at designated counting centers under ECI observer supervision after polling ends. EVM results are counted round by round for each constituency. Official results are published at results.eci.gov.in on counting day.\n\n[Offline response — connect your API key for live AI answers]';
       }
       if (lower.includes('right') || lower.includes('rights')) {
-        return 'As a voter, you have federally protected rights including: vote without intimidation, request assistance, privacy of your ballot, cast a provisional ballot, accessible polling stations, and the right to report any violations. Contact 866-OUR-VOTE if your rights are violated.\n\n[Offline response — connect your API key for live AI answers]';
+        return 'Key voter rights in India: Right to vote (Article 326), Secret ballot guaranteed by EVM, NOTA option, Paid holiday on voting day (Section 135B, RPA 1951), Accessible voting for PwD, Right to report violations. Report violations via Voter Helpline 1950 or cVIGIL app.\n\n[Offline response — connect your API key for live AI answers]';
       }
-      return 'I\'m currently offline, but I can help with common election questions. Try asking about voter registration, election dates, ID requirements, how votes are counted, or your voter rights. Connect your Gemini API key in Settings for full AI-powered responses.\n\n[Offline response — connect your API key for live AI answers]';
+      return 'I am currently offline, but I can help with common Indian election questions. Try asking about voter registration at nvsp.in, EPIC cards, how to find your polling booth, EVM and VVPAT, NOTA, or voter rights. Connect your Gemini API key in Settings for full AI-powered responses.\n\n[Offline response — connect your API key for live AI answers]';
     };
 
     /* ============================================
@@ -2693,15 +2736,14 @@ Rules:
      */
     const initCharts = () => {
       try {
-        google.charts.load('current', { packages: ['corechart', 'timeline', 'bar'] });
+        google.charts.load('current', { packages: ['corechart', 'timeline'] });
         google.charts.setOnLoadCallback(() => {
           chartsLoaded = true;
-          drawHomeBarChart();
-          drawTimelineChart();
-          drawFaqPieChart();
+          console.log('Google Charts loaded successfully');
+          drawHomeBarChart(); // Only draw the initially visible Home chart
         });
       } catch (e) {
-        console.warn('Google Charts failed to load:', e);
+        /* Google Charts load error handled silently */
       }
     };
 
@@ -2716,12 +2758,11 @@ Rules:
 
       const data = google.visualization.arrayToDataTable([
         ['Age Group', 'Turnout %', { role: 'style' }, { role: 'annotation' }],
-        ['18-24', 36, '#4f8ef7', '36%'],
-        ['25-34', 49, '#6366f1', '49%'],
-        ['35-44', 55, '#8b5cf6', '55%'],
-        ['45-54', 63, '#a855f7', '63%'],
-        ['55-64', 68, '#00e5a0', '68%'],
-        ['65+', 72, '#00d4aa', '72%']
+        ['18-25', 58, '#4f8ef7', '58%'],
+        ['26-35', 67, '#6366f1', '67%'],
+        ['36-45', 71, '#8b5cf6', '71%'],
+        ['46-60', 74, '#a855f7', '74%'],
+        ['60+',   69, '#00e5a0', '69%']
       ]);
 
       const options = {
@@ -2745,6 +2786,9 @@ Rules:
       };
 
       const chart = new google.visualization.ColumnChart(container);
+      google.visualization.events.addListener(chart, 'ready', () => {
+        console.log('Google Charts loaded successfully');
+      });
       chart.draw(data, options);
     };
 
@@ -2765,7 +2809,7 @@ Rules:
 
       ELECTION_PHASES.forEach(phase => {
         data.addRows([
-          ['Election 2026', phase.name, phase.start, phase.end]
+          ['Lok Sabha 2029', phase.name, phase.start, phase.end]
         ]);
       });
 
@@ -2782,6 +2826,9 @@ Rules:
       };
 
       const chart = new google.visualization.Timeline(container);
+      google.visualization.events.addListener(chart, 'ready', () => {
+        console.log('Google Charts loaded successfully');
+      });
       chart.draw(data, options);
     };
 
@@ -2821,6 +2868,9 @@ Rules:
       };
 
       const chart = new google.visualization.PieChart(container);
+      google.visualization.events.addListener(chart, 'ready', () => {
+        console.log('Google Charts loaded successfully');
+      });
       chart.draw(data, options);
     };
 
